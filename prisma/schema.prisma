@@ -1,16 +1,240 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
+}
+
+model asiggrupoevento {
+  id_asig_ge    Int           @id @default(autoincrement())
+  id_evento     Int
+  id_grp_srv    Int
+  notas         String?       @db.VarChar(500)
+  evento        evento        @relation(fields: [id_evento], references: [id_evento], onDelete: Cascade)
+  gruposervicio gruposervicio @relation(fields: [id_grp_srv], references: [id_grupo], onDelete: Cascade)
+
+  @@unique([id_evento, id_grp_srv])
+}
+
+model comunidad {
+  id_comunidad            Int                       @id @default(autoincrement())
+  nombre                  String                    @unique @db.VarChar(255)
+  direccion               String                    @db.VarChar(500)
+  telefono                String?                   @db.VarChar(20)
+  email                   String?                   @unique @db.VarChar(255)
+  id_parroquia            Int
+  parroquia               parroquia                 @relation(fields: [id_parroquia], references: [id_parroquia], onDelete: NoAction)
+  evento                  evento[]
+  lidercomunitario        lidercomunitario[]
+  turnoliturgocomunitario turnoliturgocomunitario[]
+}
+
+model estadointencion {
+  id_estadoin Int         @id @default(autoincrement())
+  nombre      String      @unique @db.VarChar(50)
+  descripcion String?     @db.VarChar(255)
+  intencion   intencion[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model evento {
+  id_evento               Int                 @id @default(autoincrement())
+  nombre                  String              @db.VarChar(255)
+  fecha_ini               DateTime            @db.Timestamptz(6)
+  fecha_fin               DateTime?           @db.Timestamptz(6)
+  descripcion             String?
+  id_comunidad            Int
+  id_tipoevento           Int
+  aceptaintenciones       Boolean             @default(false)
+  requiereinscripcion     Boolean             @default(false)
+  id_celebrante           Int?
+  nombrecelebranteexterno String?             @db.VarChar(200)
+  asiggrupoevento         asiggrupoevento[]
+  personalparroquial      personalparroquial? @relation(fields: [id_celebrante], references: [id_personal])
+  comunidad               comunidad           @relation(fields: [id_comunidad], references: [id_comunidad], onDelete: NoAction)
+  tipoevento              tipoevento          @relation(fields: [id_tipoevento], references: [id_tipo], onDelete: NoAction)
+  intencion               intencion[]
+}
+
+model feligres {
+  id_feligres   Int         @id @default(autoincrement())
+  nombre        String      @db.VarChar(100)
+  apellido      String      @db.VarChar(100)
+  fecharegistro DateTime    @default(dbgenerated("CURRENT_DATE")) @db.Date
+  telefono      String?     @db.VarChar(20)
+  email         String?     @unique @db.VarChar(255)
+  intencion     intencion[]
+}
+
+model gruposervicio {
+  id_grupo        Int               @id @default(autoincrement())
+  nombre          String            @unique @db.VarChar(100)
+  descripcion     String?           @db.VarChar(255)
+  activo          Boolean           @default(true)
+  id_ministerio   Int
+  asiggrupoevento asiggrupoevento[]
+  ministerio      ministerio        @relation(fields: [id_ministerio], references: [id_ministerio], onDelete: NoAction)
+  miembrogrupo    miembrogrupo[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model intencion {
+  id_intencion       Int             @id @default(autoincrement())
+  id_feligres        Int
+  id_evento          Int?
+  id_tipointencion   Int
+  id_estadointencion Int
+  descripcion        String
+  fechasolicitud     DateTime        @default(now()) @db.Timestamptz(6)
+  montoofrenda       Decimal?        @default(0.00) @db.Decimal(10, 2)
+  pagada             Boolean         @default(false)
+  montopagado        Decimal?        @db.Decimal(10, 2)
+  fechapago          DateTime?       @db.Timestamptz(6)
+  estadointencion    estadointencion @relation(fields: [id_estadointencion], references: [id_estadoin], onDelete: NoAction)
+  evento             evento?         @relation(fields: [id_evento], references: [id_evento])
+  feligres           feligres        @relation(fields: [id_feligres], references: [id_feligres], onDelete: NoAction)
+  tipointencion      tipointencion   @relation(fields: [id_tipointencion], references: [id_tipointencion], onDelete: NoAction)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model lidercomunitario {
+  id_lider           Int                @id @default(autoincrement())
+  id_personal        Int
+  id_comunidad       Int
+  rolliderazgo       String             @db.VarChar(100)
+  fecha_ini          DateTime           @db.Date
+  fecha_fin          DateTime?          @db.Date
+  activo             Boolean            @default(true)
+  comunidad          comunidad          @relation(fields: [id_comunidad], references: [id_comunidad], onDelete: NoAction)
+  personalparroquial personalparroquial @relation(fields: [id_personal], references: [id_personal], onDelete: NoAction)
+
+  @@unique([id_personal, id_comunidad, rolliderazgo, fecha_ini])
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model miembrogrupo {
+  id_miembrogrupo    Int                @id @default(autoincrement())
+  id_personal        Int
+  id_gruposervicio   Int
+  fecha_ini_msia     DateTime           @db.Date
+  fecha_fin_msia     DateTime?          @db.Date
+  roldentrogrupo     String             @db.VarChar(100)
+  activo             Boolean            @default(true)
+  gruposervicio      gruposervicio      @relation(fields: [id_gruposervicio], references: [id_grupo], onDelete: Cascade)
+  personalparroquial personalparroquial @relation(fields: [id_personal], references: [id_personal], onDelete: NoAction)
+
+  @@unique([id_personal, id_gruposervicio, fecha_ini_msia])
+}
+
+model ministerio {
+  id_ministerio           Int                       @id @default(autoincrement())
+  nombre                  String                    @unique @db.VarChar(255)
+  descripcion             String?                   @db.VarChar(500)
+  fechafundacion          DateTime?                 @db.Date
+  gruposervicio           gruposervicio[]
+  participacionministerio participacionministerio[]
+}
+
+model parroquia {
+  id_parroquia Int         @id @default(autoincrement())
+  nombre       String      @db.VarChar(255)
+  direccion    String      @db.VarChar(500)
+  telefono     String?     @db.VarChar(20)
+  email        String?     @unique @db.VarChar(255)
+  comunidad    comunidad[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model participacionministerio {
+  id_part_min            Int                 @id @default(autoincrement())
+  id_personal            Int
+  id_ministerio          Int
+  id_roldentroministerio Int
+  fecha_ini_part         DateTime            @db.Date
+  fecha_fin_part         DateTime?           @db.Date
+  activo                 Boolean             @default(true)
+  ministerio             ministerio          @relation(fields: [id_ministerio], references: [id_ministerio], onDelete: NoAction)
+  personalparroquial     personalparroquial  @relation(fields: [id_personal], references: [id_personal], onDelete: Cascade)
+  roldentroministerio    roldentroministerio @relation(fields: [id_roldentroministerio], references: [id_roldentroministerio], onDelete: NoAction)
+
+  @@unique([id_personal, id_ministerio, fecha_ini_part])
+}
+
+model personal_rol {
+  id_personal        Int
+  id_rol             Int
+  personalparroquial personalparroquial @relation(fields: [id_personal], references: [id_personal], onDelete: Cascade)
+  rolpersonal        rolpersonal        @relation(fields: [id_rol], references: [id_rol], onDelete: Cascade)
+
+  @@id([id_personal, id_rol])
+}
+
+model personalparroquial {
+  id_personal             Int                       @id @default(autoincrement())
+  nombre                  String                    @db.VarChar(100)
+  apellido                String                    @db.VarChar(100)
+  usuarioacceso           String?                   @unique @db.VarChar(50)
+  contrasena              String?                   @db.VarChar(255)
+  email                   String?                   @unique @db.VarChar(255)
+  telefono                String?                   @db.VarChar(20)
+  cargo                   String                    @db.VarChar(100)
+  evento                  evento[]
+  lidercomunitario        lidercomunitario[]
+  miembrogrupo            miembrogrupo[]
+  participacionministerio participacionministerio[]
+  personal_rol            personal_rol[]
+}
+
+model roldentroministerio {
+  id_roldentroministerio  Int                       @id @default(autoincrement())
+  nombre                  String                    @unique @db.VarChar(100)
+  descripcion             String?                   @db.VarChar(255)
+  participacionministerio participacionministerio[]
+}
+
+model rolpersonal {
+  id_rol       Int            @id @default(autoincrement())
+  nombre       String         @unique @db.VarChar(100)
+  descripcion  String?        @db.VarChar(255)
+  permisos     String?
+  personal_rol personal_rol[]
+}
+
+model tipoevento {
+  id_tipo     Int      @id @default(autoincrement())
+  nombre      String   @unique @db.VarChar(100)
+  descripcion String?  @db.VarChar(255)
+  evento      evento[]
+}
+
+model tipointencion {
+  id_tipointencion Int         @id @default(autoincrement())
+  nombre           String      @unique @db.VarChar(100)
+  descripcion      String?     @db.VarChar(255)
+  intencion        intencion[]
+}
+
+model tipoturno {
+  id_tipo                 Int                       @id @default(autoincrement())
+  nombre                  String                    @unique @db.VarChar(100)
+  descripcion             String?                   @db.VarChar(255)
+  turnoliturgocomunitario turnoliturgocomunitario[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model turnoliturgocomunitario {
+  id_turno     Int       @id @default(autoincrement())
+  id_comunidad Int
+  id_tipo      Int
+  fecha_inicio DateTime  @db.Timestamptz(6)
+  fecha_fin    DateTime? @db.Timestamptz(6)
+  descripcion  String    @db.VarChar(255)
+  comunidad    comunidad @relation(fields: [id_comunidad], references: [id_comunidad], onDelete: NoAction)
+  tipoturno    tipoturno @relation(fields: [id_tipo], references: [id_tipo], onDelete: NoAction)
+
+  @@unique([id_comunidad, id_tipo, fecha_inicio])
 }
