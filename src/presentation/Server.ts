@@ -19,6 +19,10 @@ export class Server {
   }
 
   start = async (): Promise<void> => {
+    //* Middlewares
+    this.app.use(express.json()) // raw
+    this.app.use(express.urlencoded({ extended: true })) // x-www-form-urlencoded
+
     this.app.use(express.static(this.PUBLIC_PATH))
 
     this.app.use(this.routes)

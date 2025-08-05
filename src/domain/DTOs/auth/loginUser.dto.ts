@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { regularExps } from '../../../config'
 
 interface LoginUser {
@@ -16,6 +17,6 @@ export class LoginUserDTO {
     if (password.length <= 0) return ['Missing password']
     if (password.length <= 0) return ['Password to short']
 
-    return ['', new LoginUserDTO(email, password)]
+    return [undefined!, new LoginUserDTO(email, password)]
   }
 }
