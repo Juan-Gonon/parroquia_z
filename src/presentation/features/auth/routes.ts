@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-extraneous-class */
 import { Router } from 'express'
-import { AuthRoutes } from '../presentation/features/auth/routes'
+import { AuhtController } from './controller'
 
-export class AppRouter {
+export class AuthRoutes {
   static get routes (): Router {
     const router = Router()
+    const controller = new AuhtController()
 
-    router.use('/api/auth', AuthRoutes.routes)
+    router.post('/login', controller.loginUser)
 
     return router
   }
