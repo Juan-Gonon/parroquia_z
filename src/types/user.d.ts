@@ -4,8 +4,8 @@ export interface RawUserFromDB {
   contrasena: string
 }
 
-export interface UserDTO {
+export interface UserServiceR {
   idUsuario: number
   usuarioacceso: string
-  contrasena: string
+  token: string
 }
