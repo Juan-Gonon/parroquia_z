@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
+import { bcryptAdapter } from '../../config'
 import { prisma } from '../../data/postgress'
 import { CustomError, LoginUserDTO, UserEntity } from '../../domain'
 // import { CustomError } from '../../domain'
@@ -20,9 +21,15 @@ export class AuthService {
 
       if (!user) throw CustomError.badRequest('User does not exist')
 
+      const isMatching = bcryptAdapter.compare(
+        loginUserDTO.password,
+        user.contrasena
+      )
+
+      if (!isMatching) throw CustomError.badRequest('Invalid user')
+
       return user
     } catch (error) {
-      console.log(error)
       if (error instanceof Error) {
         throw CustomError.internalServer(error.message)
       }
