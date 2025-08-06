@@ -177,16 +177,15 @@ model personalparroquial {
   id_personal             Int                       @id @default(autoincrement())
   nombre                  String                    @db.VarChar(100)
   apellido                String                    @db.VarChar(100)
-  usuarioacceso           String?                   @unique @db.VarChar(50)
-  contrasena              String?                   @db.VarChar(255)
   email                   String?                   @unique @db.VarChar(255)
   telefono                String?                   @db.VarChar(20)
-  cargo                   String                    @db.VarChar(100)
+  direccion               String?                   @db.VarChar(255)
   evento                  evento[]
   lidercomunitario        lidercomunitario[]
   miembrogrupo            miembrogrupo[]
   participacionministerio participacionministerio[]
   personal_rol            personal_rol[]
+  usuario                 usuario?
 }
 
 model roldentroministerio {
@@ -237,4 +236,11 @@ model turnoliturgocomunitario {
   tipoturno    tipoturno @relation(fields: [id_tipo], references: [id_tipo], onDelete: NoAction)
 
   @@unique([id_comunidad, id_tipo, fecha_inicio])
+}
+
+model usuario {
+  id_usuario         Int                @id
+  usuarioacceso      String             @unique @db.VarChar(50)
+  contrasena         String             @db.VarChar(255)
+  personalparroquial personalparroquial @relation(fields: [id_usuario], references: [id_personal], onDelete: NoAction, onUpdate: NoAction)
 }
