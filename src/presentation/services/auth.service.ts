@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { prisma } from '../../data/postgress'
-import { LoginUserDTO, UserEntity } from '../../domain'
+import { CustomError, LoginUserDTO, UserEntity } from '../../domain'
 // import { CustomError } from '../../domain'
 
 export class AuthService {
@@ -15,8 +15,19 @@ export class AuthService {
   }
 
   public async loginUser (loginUserDTO: LoginUserDTO): Promise<UserEntity | null> {
-    const user = await this.findOneUser(loginUserDTO.user)
+    try {
+      const user = await this.findOneUser(loginUserDTO.user)
 
-    return user
+      if (!user) throw CustomError.badRequest('User does not exist')
+
+      return user
+    } catch (error) {
+      console.log(error)
+      if (error instanceof Error) {
+        throw CustomError.internalServer(error.message)
+      }
+
+      throw CustomError.internalServer('Unknown error')
+    }
   }
 }
