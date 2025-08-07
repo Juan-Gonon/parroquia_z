@@ -8,7 +8,7 @@ export class AppRouter {
     const router = Router()
 
     router.use('/api/auth', AuthRoutes.routes)
-    router.use('/api/community', CommunityRoutes.router)
+    router.use('/api/communities', CommunityRoutes.router)
 
     return router
   }

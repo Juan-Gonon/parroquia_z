@@ -1,21 +1,45 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { prisma } from '../../data/postgress'
+import { CustomError, PaginationDto } from '../../domain'
 
 export class CommunityService {
-  public async getAllCommunities (): Promise<void> {
+  public async getAllCommunities (paginationDTO: PaginationDto): Promise<object> {
+    const { page, limit } = paginationDTO
+
+    const offset = (page - 1) * limit
+
     try {
-      const community = await prisma.comunidad.findMany({
-        include: {
-          parroquia: {
-            select: {
-              nombre: true
+      const [total, comunities] = await prisma.$transaction([
+        prisma.comunidad.count(),
+        prisma.comunidad.findMany({
+          skip: offset,
+          take: limit,
+          include: {
+            parroquia: {
+              select: {
+                nombre: true
+              }
             }
           }
-        }
-      })
+        })
+      ])
 
-      community?.forEach((com) => console.log(com))
+      if (!comunities || comunities.length === 0) throw CustomError.badRequest('Communities are empty')
+
+      return {
+        page,
+        limit,
+        total,
+        next: `/api/communities?page=${page + 1}&limit=${limit}`,
+        prev: page > 1 ? `/api/communities?page=${page - 1}&limit=${limit}` : null,
+        comunities
+      }
     } catch (error) {
-      throw new Error('Error gets user not found')
+      if (error instanceof CustomError) {
+        throw error
+      }
+
+      throw CustomError.internalServer('Internal server error')
     }
   }
 }
