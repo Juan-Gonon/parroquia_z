@@ -1,11 +1,20 @@
 
-export interface CommunityWithParishName {
+export interface BaseCommunity {
   id_comunidad: number
   nombre: string
   direccion: string
+  id_parroquia: number
+}
+
+export interface CommunityResponseDTO extends BaseCommunity {
   telefono: string | null
   email: string | null
-  id_parroquia: number
+  parroquia: number
+}
+
+export interface CommunityWithParishName extends BaseCommunity {
+  telefono: string | null
+  email: string | null
   parroquia: {
     nombre: string
   }

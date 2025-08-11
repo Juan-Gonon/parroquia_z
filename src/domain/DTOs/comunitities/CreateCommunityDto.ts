@@ -28,12 +28,15 @@ export class CreateCommunityDto implements CreateCommunityDTO {
     this.id_parroquia = id_parroquia
   }
 
-  static create ({ nombre, direccion, telefono, email, id_parroquia }: CreateCommunityDTO): [ string?, CreateCommunityDto?] {
+  static create (props: { nombre: string, direccion: string, telefono?: string, email?: string, id_parroquia: any }): [ string?, CreateCommunityDto?] {
+    const { nombre, direccion, telefono, email, id_parroquia } = props
+
+    const idParroqui = Number(id_parroquia)
+
     if (!nombre) return ['The name is required']
     if (!direccion) return ['The address is required']
-    if (id_parroquia === null || id_parroquia === undefined) {
-      return ['The parish ID must be a valid number']
-    }
+
+    if (isNaN(idParroqui)) return ['The parish ID must be a valid number']
 
     if (telefono && !regularExps.phone.test(telefono)) {
       return ['The phone number must have exactly 8 digits']
@@ -43,6 +46,6 @@ export class CreateCommunityDto implements CreateCommunityDTO {
       return ['The email addres is not  vailid']
     }
 
-    return [undefined!, new CreateCommunityDto({ nombre, direccion, telefono: telefono ?? null, email: email ?? null, id_parroquia })]
+    return [undefined!, new CreateCommunityDto({ nombre, direccion, telefono: telefono ?? null, email: email ?? null, id_parroquia: idParroqui })]
   }
 }

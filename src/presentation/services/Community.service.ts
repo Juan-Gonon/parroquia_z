@@ -1,9 +1,27 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { prisma } from '../../data/postgress'
-import { CustomError, PaginationDto } from '../../domain'
-import { PaginatedCommunityResponseDTO } from '../../types/comunitities'
+import { CustomError, PaginationDto, CreateCommunityDTO } from '../../domain'
+import { CommunityResponseDTO, PaginatedCommunityResponseDTO } from '../../types/comunitities'
 
 export class CommunityService {
+  public async getCommunityByName (name: string): Promise<CommunityResponseDTO | null> {
+    try {
+      const community = await prisma.comunidad.findFirst({
+        where: {
+          nombre: name
+        }
+      })
+
+      return community as CommunityResponseDTO
+    } catch (error) {
+      if (error instanceof CustomError) {
+        throw error
+      }
+
+      return null
+    }
+  }
+
   public async getAllCommunities (paginationDTO: PaginationDto): Promise<PaginatedCommunityResponseDTO> {
     const { page, limit } = paginationDTO
 
@@ -41,6 +59,34 @@ export class CommunityService {
       }
 
       throw CustomError.internalServer('Internal server error')
+    }
+  }
+
+  public async createCommunity (createCommunityDTO: CreateCommunityDTO): Promise<CommunityResponseDTO | null> {
+    try {
+      const communityExist = await this.getCommunityByName(createCommunityDTO.nombre)
+
+      if (communityExist) throw CustomError.badRequest('Community exist')
+
+      const { nombre, direccion, email, telefono, id_parroquia: idParroquia } = createCommunityDTO
+
+      const community = await prisma.comunidad.create({
+        data: {
+          nombre,
+          direccion,
+          telefono: telefono ?? null,
+          email: email ?? null,
+          id_parroquia: idParroquia
+        }
+      })
+
+      return community as CommunityResponseDTO
+    } catch (error) {
+      if (error instanceof CustomError) {
+        throw error
+      }
+
+      throw CustomError.internalServer('Error internal server')
     }
   }
 }

@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { Request, Response } from 'express'
 import { CommunityService } from '../../services/Community.service'
-import { handleError, PaginationDto } from '../../../domain'
+import { CustomError, handleError, PaginationDto } from '../../../domain'
 import { CreateCommunityDto } from '../../../domain/DTOs/comunitities/CreateCommunityDto'
 
 export class CommunityController {
@@ -26,13 +26,14 @@ export class CommunityController {
   //   }
 
   // Crear una nueva comunidad
-  createCommunity = async (req: Request, res: Response): Promise<void> => {
+  public createCommunity = async (req: Request, res: Response): Promise<Response> => {
     const [error, createDto] = CreateCommunityDto.create(req.body)
 
-    console.log({
-      error,
-      createDto
-    })
+    if (error) return handleError(CustomError.badRequest(error), res)
+
+    return await this.communityService.createCommunity(createDto!)
+      .then((community) => res.status(201).json(community))
+      .catch((error) => handleError(error, res))
   }
 
   // Actualizar una comunidad
