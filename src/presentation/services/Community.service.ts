@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { prisma } from '../../data/postgress'
 import { CustomError, PaginationDto } from '../../domain'
+import { PaginatedCommunityResponseDTO } from '../../types/comunitities'
 
 export class CommunityService {
-  public async getAllCommunities (paginationDTO: PaginationDto): Promise<object> {
+  public async getAllCommunities (paginationDTO: PaginationDto): Promise<PaginatedCommunityResponseDTO> {
     const { page, limit } = paginationDTO
 
     const offset = (page - 1) * limit
