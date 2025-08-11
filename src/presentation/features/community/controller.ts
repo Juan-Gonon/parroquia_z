@@ -3,6 +3,7 @@
 import { Request, Response } from 'express'
 import { CommunityService } from '../../services/Community.service'
 import { handleError, PaginationDto } from '../../../domain'
+import { CreateCommunityDto } from '../../../domain/DTOs/comunitities/CreateCommunityDto'
 
 export class CommunityController {
   constructor (private readonly communityService: CommunityService) {}
@@ -25,8 +26,13 @@ export class CommunityController {
   //   }
 
   // Crear una nueva comunidad
-  public async createCommunity (): Promise<void> {
-    // Lógica para crear una comunidad
+  createCommunity = async (req: Request, res: Response): Promise<void> => {
+    const [error, createDto] = CreateCommunityDto.create(req.body)
+
+    console.log({
+      error,
+      createDto
+    })
   }
 
   // Actualizar una comunidad

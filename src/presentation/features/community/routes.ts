@@ -10,6 +10,7 @@ export class CommunityRoutes {
     const controller = new CommunityController(communityService)
 
     router.get('/', controller.getAllCommunities)
+    router.post('/', controller.createCommunity)
 
     return router
   }
