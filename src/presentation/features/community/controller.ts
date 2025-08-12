@@ -16,7 +16,7 @@ export class CommunityController {
     if (error) return handleError(CustomError.badRequest(error), res)
 
     return await this.communityService.getAllCommunities(paginationDTO!)
-      .then((community) => res.status(201).json(community))
+      .then((community) => res.status(200).json(community))
       .catch((error) => handleError(error, res))
   }
 
@@ -26,7 +26,7 @@ export class CommunityController {
     if (isNaN(communityID)) return handleError(CustomError.badRequest('The id contains invalid characters'), res)
 
     return await this.communityService.getCommunityById(communityID)
-      .then((community) => res.status(201).json(community))
+      .then((community) => res.status(200).json(community))
       .catch((error) => handleError(error, res))
   }
 
@@ -37,7 +37,7 @@ export class CommunityController {
     if (error) return handleError(CustomError.badRequest(error), res)
 
     return await this.communityService.createCommunity(createDto!)
-      .then((community) => res.status(201).json(community))
+      .then((community) => res.status(200).json(community))
       .catch((error) => handleError(error, res))
   }
 
