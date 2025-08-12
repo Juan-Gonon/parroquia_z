@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { prisma } from '../../data/postgress'
 import { CustomError, PaginationDto, CreateCommunityDTO } from '../../domain'
@@ -19,6 +20,24 @@ export class CommunityService {
       }
 
       return null
+    }
+  }
+
+  public async getCommunityById (id: number): Promise <CommunityResponseDTO> {
+    try {
+      const community = await prisma.comunidad.findFirst({
+        where: {
+          id_comunidad: id
+        }
+      })
+
+      if (!community) throw CustomError.badRequest('The specified community does not exist')
+
+      return community
+    } catch (error) {
+      if (error instanceof CustomError) throw error
+
+      throw CustomError.internalServer('Internal server error')
     }
   }
 

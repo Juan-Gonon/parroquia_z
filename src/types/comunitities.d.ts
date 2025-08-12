@@ -9,7 +9,6 @@ export interface BaseCommunity {
 export interface CommunityResponseDTO extends BaseCommunity {
   telefono: string | null
   email: string | null
-  parroquia: number
 }
 
 export interface CommunityWithParishName extends BaseCommunity {

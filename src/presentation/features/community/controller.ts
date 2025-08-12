@@ -20,10 +20,15 @@ export class CommunityController {
       .catch((error) => handleError(error, res))
   }
 
-  // Obtener una comunidad por su ID
-  //   public async getCommunityById (id: number): Promise<void> {
-  //     // Lógica para obtener una comunidad por su ID
-  //   }
+  public getCommunityById = async (req: Request, res: Response): Promise<Response> => {
+    const communityID = +req.params.id!
+
+    if (isNaN(communityID)) return handleError(CustomError.badRequest('The id contains invalid characters'), res)
+
+    return await this.communityService.getCommunityById(communityID)
+      .then((community) => res.status(201).json(community))
+      .catch((error) => handleError(error, res))
+  }
 
   // Crear una nueva comunidad
   public createCommunity = async (req: Request, res: Response): Promise<Response> => {
