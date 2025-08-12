@@ -13,7 +13,7 @@ export class CommunityService {
         }
       })
 
-      return community as CommunityResponseDTO
+      return community
     } catch (error) {
       if (error instanceof CustomError) {
         throw error
@@ -62,7 +62,7 @@ export class CommunityService {
         })
       ])
 
-      if (!comunities || comunities.length === 0) throw CustomError.badRequest('Communities are empty')
+      if (!comunities || comunities.length === 0) throw CustomError.badRequest('The communities are empty')
 
       return {
         page,
@@ -85,7 +85,7 @@ export class CommunityService {
     try {
       const communityExist = await this.getCommunityByName(createCommunityDTO.nombre)
 
-      if (communityExist) throw CustomError.badRequest('Community exist')
+      if (communityExist) throw CustomError.badRequest('The community already exists')
 
       const { nombre, direccion, email, telefono, id_parroquia: idParroquia } = createCommunityDTO
 

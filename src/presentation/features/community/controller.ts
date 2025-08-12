@@ -13,7 +13,7 @@ export class CommunityController {
     const { page = 1, limit = 10 } = req.query
     const [error, paginationDTO] = PaginationDto.create(+page, +limit)
 
-    if (error) return res.status(400).json({ error })
+    if (error) return handleError(CustomError.badRequest(error), res)
 
     return await this.communityService.getAllCommunities(paginationDTO!)
       .then((community) => res.status(201).json(community))
