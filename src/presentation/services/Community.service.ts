@@ -132,4 +132,26 @@ export class CommunityService {
       throw CustomError.internalServer('Internal server error')
     }
   }
+
+  public async deleteCommunity (id: number): Promise<{ success: boolean, message: string }> {
+    const communityExist = await this.getCommunityById(id)
+    try {
+      if (!communityExist) throw CustomError.badRequest('Community not found')
+
+      await prisma.comunidad.delete({
+        where: {
+          id_comunidad: id
+        }
+      })
+
+      return {
+        success: true,
+        message: 'Community deleted successfully'
+      }
+    } catch (error) {
+      if (error instanceof CustomError) throw error
+
+      throw CustomError.internalServer('Internal server error')
+    }
+  }
 }

@@ -53,7 +53,13 @@ export class CommunityController {
   }
 
   // Eliminar una comunidad
-  public async deleteCommunity (id: number): Promise<void> {
-    // Lógica para eliminar una comunidad
+  public deleteCommunity = async (req: Request, res: Response): Promise<Response> => {
+    const communityID = +req.params.id!
+
+    if (isNaN(communityID)) return handleError(CustomError.badRequest('The id contains invalid characters'), res)
+
+    return await this.communityService.deleteCommunity(communityID)
+      .then((response) => res.status(200).json(response))
+      .catch((error) => handleError(error, res))
   }
 }
