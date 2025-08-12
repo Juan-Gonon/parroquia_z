@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { prisma } from '../../data/postgress'
-import { CustomError, PaginationDto, CreateCommunityDTO } from '../../domain'
+import { CustomError, PaginationDto, CreateCommunityDTO, UpdateCommunityDto } from '../../domain'
 import { CommunityResponseDTO, PaginatedCommunityResponseDTO } from '../../types/comunitities'
 
 export class CommunityService {
@@ -106,6 +107,29 @@ export class CommunityService {
       }
 
       throw CustomError.internalServer('Error internal server')
+    }
+  }
+
+  public async updateCommunity (updateCommunityDto: UpdateCommunityDto): Promise<CommunityResponseDTO> {
+    const communityById = await this.getCommunityById(updateCommunityDto.id)
+    try {
+      // updateCommunityDto.nombre ?? communityById.nombre
+      // updateCommunityDto.direccion ?? communityById.direccion
+
+      if (!communityById) throw CustomError.badRequest('Community not found')
+
+      const uCommunity = await prisma.comunidad.update({
+        data: updateCommunityDto.values,
+        where: {
+          id_comunidad: communityById.id_comunidad
+        }
+      })
+
+      return uCommunity
+    } catch (error) {
+      if (error instanceof CustomError) throw error
+
+      throw CustomError.internalServer('Internal server error')
     }
   }
 }

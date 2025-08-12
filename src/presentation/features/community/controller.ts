@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { Request, Response } from 'express'
 import { CommunityService } from '../../services/Community.service'
-import { CustomError, handleError, PaginationDto } from '../../../domain'
+import { CustomError, handleError, PaginationDto, UpdateCommunityDto } from '../../../domain'
 import { CreateCommunityDto } from '../../../domain/DTOs/comunitities/CreateCommunityDto'
 
 export class CommunityController {
@@ -42,8 +42,14 @@ export class CommunityController {
   }
 
   // Actualizar una comunidad
-  public async updateCommunity (id: number): Promise<void> {
-    // Lógica para actualizar una comunidad
+  public updateCommunity = async (req: Request, res: Response): Promise<Response> => {
+    const [error, updateDto] = UpdateCommunityDto.update({ ...req.body, id: req.params.id })
+
+    if (error) return handleError(CustomError.badRequest(error), res)
+
+    return await this.communityService.updateCommunity(updateDto!)
+      .then((community) => res.status(200).json(community))
+      .catch((error) => handleError(error, res))
   }
 
   // Eliminar una comunidad

@@ -12,6 +12,7 @@ export class CommunityRoutes {
     router.get('/', controller.getAllCommunities)
     router.get('/:id', controller.getCommunityById)
     router.post('/', controller.createCommunity)
+    router.put('/:id', controller.updateCommunity)
 
     return router
   }
