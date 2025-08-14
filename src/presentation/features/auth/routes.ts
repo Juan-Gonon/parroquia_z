@@ -2,6 +2,7 @@
 import { Router } from 'express'
 import { AuhtController } from './controller'
 import { AuthService } from '../../services/auth.service'
+import { ValidateJWT } from '../../middleware/validateJWT'
 
 export class AuthRoutes {
   static get routes (): Router {
@@ -10,6 +11,7 @@ export class AuthRoutes {
     const controller = new AuhtController(authService)
 
     router.post('/login', controller.loginUser)
+    router.get('/renew', [ValidateJWT.validate], controller.revalidateToken)
 
     return router
   }

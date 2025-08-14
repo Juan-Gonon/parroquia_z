@@ -4,6 +4,7 @@ import { Request, Response } from 'express'
 import { CustomError } from '../../../domain'
 import { LoginUserDTO } from '../../../domain/DTOs'
 import { AuthService } from '../../services/auth.service'
+import { AuthenticatedRequest } from '../../../types/user'
 
 export class AuhtController {
   constructor (private readonly authService: AuthService) {}
@@ -23,6 +24,16 @@ export class AuhtController {
     return await this.authService
       .loginUser(loginDto!)
       .then((user) => res.json(user))
+      .catch((error) => this.handleError(error, res))
+  }
+
+  public revalidateToken = async (req: AuthenticatedRequest, res: Response): Promise<Response> => {
+    const user = req.user
+
+    if (!user) throw CustomError.badRequest('User not valid')
+
+    return await this.authService.revalidateTokenS(req.user!)
+      .then((userRes) => res.status(200).json(userRes))
       .catch((error) => this.handleError(error, res))
   }
 }
