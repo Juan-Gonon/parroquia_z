@@ -1,7 +1,7 @@
 {
     "include": [
     "src/**/*.ts",    // Incluye todos los archivos TypeScript en src
-    "test/**/*.ts",   // Incluye todos los archivos TypeScript en test
+    // "test/**/*.ts",   // Incluye todos los archivos TypeScript en test
     "*.ts"            // También incluye archivos en la raíz del proyecto
   ],
   "exclude": [
@@ -17,7 +17,7 @@
     // See also https://aka.ms/tsconfig/module
     "module": "nodenext",
     "target": "esnext",
-    "types": [],
+    // "types": [],
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],
