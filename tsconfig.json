@@ -1,8 +1,16 @@
 {
-  // Visit https://aka.ms/tsconfig to read more about this file
+    "include": [
+    "src/**/*.ts",    // Incluye todos los archivos TypeScript en src
+    "test/**/*.ts",   // Incluye todos los archivos TypeScript en test
+    "*.ts"            // También incluye archivos en la raíz del proyecto
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
   "compilerOptions": {
     // File Layout
-    "rootDir": "src",
+    "rootDir": "./",
     "outDir": "dist/",
 
     // Environment Settings
