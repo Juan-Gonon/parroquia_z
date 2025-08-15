@@ -4,3 +4,4 @@ node_modules
 /postgres
 /src/generated/prisma
 prisma/migrations
+.env.test
