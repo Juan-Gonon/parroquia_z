@@ -61,4 +61,38 @@ describe('Community route testing', () => {
       id_parroquia: community.id_parroquia
     })
   })
+
+  it('should return error when creating a duplicate community', async () => {
+    const { body } = await request(testServer.app)
+      .post('/api/communities')
+      .send(community)
+      .expect(400)
+
+    expect(body.error).toBe('The community already exists')
+  })
+
+  it('should return error when getting a non-existing community', async () => {
+    const { body } = await request(testServer.app)
+      .get('/api/communities/99999')
+      .expect(400)
+
+    expect(body.error).toBe('The specified community does not exist')
+  })
+
+  it('should delete a Community when calling DELETE on /api/communities/:id', async () => {
+    const { body } = await request(testServer.app)
+      .delete(`/api/communities/${id}`)
+      .expect(200)
+
+    expect(body.success).toBeTruthy()
+    expect(body.message).toBe('Community deleted successfully')
+  })
+
+  it('should return error when deleting a non-existing community', async () => {
+    const { body } = await request(testServer.app)
+      .delete('/api/communities/99999')
+      .expect(400)
+
+    expect(body.error).toBe('The specified community does not exist')
+  })
 })
