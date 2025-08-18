@@ -7,10 +7,11 @@ interface Options {
 }
 
 export class Server {
-  private readonly app = express()
+  public readonly app = express()
   private readonly PORT: number
   private readonly PUBLIC_PATH: string
   private readonly routes: Router
+  private serverListener?: any
 
   constructor ({ port, publicPath, routes }: Options) {
     this.PORT = port
@@ -27,8 +28,12 @@ export class Server {
 
     this.app.use(this.routes)
 
-    this.app.listen(this.PORT, () => {
+    this.serverListener = this.app.listen(this.PORT, () => {
       console.log(`Server running on port ${this.PORT}`)
     })
+  }
+
+  public close (): void {
+    this.serverListener?.close()
   }
 }

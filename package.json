@@ -19,6 +19,7 @@
     "@types/jest": "^30.0.0",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.2.0",
+    "@types/supertest": "^6.0.3",
     "jest": "^30.0.5",
     "prisma": "^6.13.0",
     "rimraf": "^6.0.1",
@@ -33,7 +34,10 @@
       "./node_modules/ts-standard/eslintrc.json"
     ],
     "parserOptions": {
-      "project": ["./tsconfig.json", "./tsconfig.test.json"]
+      "project": [
+        "./tsconfig.json",
+        "./tsconfig.test.json"
+      ]
     }
   },
   "dependencies": {
