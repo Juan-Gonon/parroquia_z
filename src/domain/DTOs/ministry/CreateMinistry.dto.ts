@@ -24,8 +24,6 @@ export class CreateMinisterioDto {
       return ['Missing name']
     }
 
-    console.log(fechafundacion)
-
     // Se procesa la fecha de fundación si existe
     let foundationDate: Date | undefined
     if (fechafundacion) {
