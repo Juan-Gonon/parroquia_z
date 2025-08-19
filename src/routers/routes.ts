@@ -6,6 +6,7 @@ import { TipoTurnoRoutes } from '../presentation/features/shiftType/routes'
 import { EventTypeRoutes } from '../presentation/features/eventType/routes'
 import { TipoIntencionRoutes } from '../presentation/features/intentionalType/routes'
 import { MinisterioRoutes } from '../presentation/features/ministry/routes'
+import { RolPersonalRoutes } from '../presentation/features/rolePersonal/routes'
 
 export class AppRouter {
   static get routes (): Router {
@@ -17,6 +18,7 @@ export class AppRouter {
     router.use('/api/event-type', EventTypeRoutes.router)
     router.use('/api/intentional-type', TipoIntencionRoutes.router)
     router.use('/api/ministry', MinisterioRoutes.router)
+    router.use('/api/personal-role', RolPersonalRoutes.router)
 
     return router
   }
