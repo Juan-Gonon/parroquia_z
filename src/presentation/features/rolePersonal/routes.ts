@@ -8,7 +8,6 @@ import { RolPersonalController } from './controller'
 import { RolPersonalService } from '../../services/RolPersonal.service'
 
 export class RolPersonalRoutes {
-  // Define un método estático para obtener el router
   static get router (): Router {
     const router = Router()
     const rolPersonalService = new RolPersonalService()
