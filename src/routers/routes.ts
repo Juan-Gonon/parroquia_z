@@ -7,6 +7,7 @@ import { EventTypeRoutes } from '../presentation/features/eventType/routes'
 import { TipoIntencionRoutes } from '../presentation/features/intentionalType/routes'
 import { MinisterioRoutes } from '../presentation/features/ministry/routes'
 import { RolPersonalRoutes } from '../presentation/features/rolePersonal/routes'
+import { RolDentroMinisterioRoutes } from '../presentation/features/roleMinistry/route'
 
 export class AppRouter {
   static get routes (): Router {
@@ -19,6 +20,7 @@ export class AppRouter {
     router.use('/api/intentional-type', TipoIntencionRoutes.router)
     router.use('/api/ministry', MinisterioRoutes.router)
     router.use('/api/personal-role', RolPersonalRoutes.router)
+    router.use('/api/role-d-ministry', RolDentroMinisterioRoutes.router)
 
     return router
   }
