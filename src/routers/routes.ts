@@ -8,6 +8,7 @@ import { TipoIntencionRoutes } from '../presentation/features/intentionalType/ro
 import { MinisterioRoutes } from '../presentation/features/ministry/routes'
 import { RolPersonalRoutes } from '../presentation/features/rolePersonal/routes'
 import { RolDentroMinisterioRoutes } from '../presentation/features/roleMinistry/route'
+import { PersonalParroquialRoutes } from '../presentation/features/parishStaff/routes'
 
 export class AppRouter {
   static get routes (): Router {
@@ -21,6 +22,7 @@ export class AppRouter {
     router.use('/api/ministry', MinisterioRoutes.router)
     router.use('/api/personal-role', RolPersonalRoutes.router)
     router.use('/api/role-d-ministry', RolDentroMinisterioRoutes.router)
+    router.use('/api/parish-staff', PersonalParroquialRoutes.router)
 
     return router
   }
