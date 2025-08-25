@@ -28,5 +28,7 @@ export const PARAMS_BODY = {
   usuarioacceso: 'usuarioacceso',
   contrasena: 'contrasena',
   fecha_inicio: 'fecha_inicio',
-  fecha_fin_turno: 'fecha_fin' // Para diferenciar de otros fecha_fin si quieres
+  fecha_fin_turno: 'fecha_fin',
+  rolPersonal: 'rolPersonal',
+  idRol: 'idRol'
 } as const

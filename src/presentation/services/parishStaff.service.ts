@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/prefer-optional-chain */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
@@ -19,7 +20,14 @@ export class PersonalParroquialService {
   // Obtener un registro de personal por su ID
   public async getPersonalById (id: number): Promise<any> {
     const personal = await prisma.personalparroquial.findUnique({
-      where: { id_personal: id }
+      where: { id_personal: id },
+      include: {
+        personal_rol: {
+          select: {
+            id_rol: true
+          }
+        }
+      }
     })
     if (personal == null) {
       throw CustomError.badRequest('The requested PersonalParroquial was not found.')
@@ -76,21 +84,35 @@ export class PersonalParroquialService {
           telefono: createPersonalDto.telefono ?? null
         }
       })
-      return newPersonal
+
+      if (!newPersonal) throw CustomError.badRequest('Error register personal')
+
+      const rol = await prisma.personal_rol.create({
+        data: {
+          id_personal: newPersonal.id_personal,
+          id_rol: createPersonalDto.idRol
+        }
+      })
+
+      return {
+        ...newPersonal,
+        id_rol: rol.id_rol
+      }
     } catch (error) {
       throw CustomError.internalServer('An error occurred while creating the PersonalParroquial.')
     }
   }
 
-  // Actualizar un registro de personal parroquial
   public async updatePersonal (
     updatePersonalDto: UpdatePersonalParroquialDto
   ): Promise<any> {
     const personalExists = await this.getPersonalById(updatePersonalDto.id)
+
     if (!personalExists) {
       throw CustomError.badRequest('The requested PersonalParroquial to update was not found.')
     }
 
+    // Validar email único
     if (updatePersonalDto.email) {
       const personalEmailExists = await this.getPersonalByEmail(updatePersonalDto.email)
       if (personalEmailExists && personalEmailExists.id_personal !== updatePersonalDto.id) {
@@ -99,11 +121,49 @@ export class PersonalParroquialService {
     }
 
     try {
-      const updatedPersonal = await prisma.personalparroquial.update({
-        where: { id_personal: updatePersonalDto.id },
-        data: { ...updatePersonalDto.values }
+      const { id_rol: idRol, ...valuesUpdated } = updatePersonalDto.values
+
+      const result = await prisma.$transaction(async (tx) => {
+      // 🔹 Actualizar datos básicos del personal
+        const updatedPersonal = await tx.personalparroquial.update({
+          where: { id_personal: updatePersonalDto.id },
+          data: { ...valuesUpdated }
+        })
+
+        // 🔹 Manejo del rol (solo si viene un idRol en el DTO)
+        if (idRol) {
+          const currentRoles = personalExists.personal_rol
+
+          if (currentRoles.length > 0) {
+            const currentRolId = currentRoles[0].id_rol
+
+            // ⚡ Si es el mismo rol, no hacemos nada
+            if (currentRolId !== idRol) {
+              await tx.personal_rol.update({
+                where: {
+                  id_personal_id_rol: {
+                    id_personal: updatedPersonal.id_personal,
+                    id_rol: currentRolId
+                  }
+                },
+                data: { id_rol: idRol }
+              })
+            }
+          } else {
+          // Si no tenía rol, lo creamos
+            await tx.personal_rol.create({
+              data: {
+                id_personal: updatedPersonal.id_personal,
+                id_rol: idRol
+              }
+            })
+          }
+        }
+
+        return updatedPersonal
       })
-      return updatedPersonal
+
+      return result
     } catch (error) {
       throw CustomError.internalServer('An error occurred while updating the PersonalParroquial.')
     }

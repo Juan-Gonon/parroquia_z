@@ -44,6 +44,9 @@ export class PersonalParroquialRoutes {
           .optional()
           .isEmail()
           .withMessage(validationMessages.invalidEmail(PARAMS_BODY.email)),
+        body(PARAMS_BODY.idRol)
+          .notEmpty().isInt()
+          .withMessage(validationMessages.required(PARAMS_BODY.idRol)),
         ValidateFields.validate
       ],
       controller.createPersonal
@@ -64,6 +67,9 @@ export class PersonalParroquialRoutes {
           .optional()
           .isEmail()
           .withMessage(validationMessages.invalidEmail(PARAMS_BODY.email)),
+        body(PARAMS_BODY.idRol)
+          .optional().isInt()
+          .withMessage(validationMessages.required(PARAMS_BODY.idRol)),
         ValidateFields.validate
       ],
       controller.updatePersonal
