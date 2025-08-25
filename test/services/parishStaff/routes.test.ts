@@ -9,14 +9,16 @@ describe('PersonalParroquial route testing', () => {
     apellido: 'Pérez',
     direccion: 'Calle Falsa 123',
     telefono: '555-1234',
-    email: 'juan.perez@example.com'
+    email: 'juan.perez@example.com',
+    idRol: 1
   }
   const personal2 = {
     nombre: 'Ana',
     apellido: 'García',
     direccion: 'Avenida Siempre Viva 742',
     telefono: '555-5678',
-    email: 'ana.garcia@example.com'
+    email: 'ana.garcia@example.com',
+    idRol: 1
   }
   let id: number
 
@@ -46,7 +48,8 @@ describe('PersonalParroquial route testing', () => {
       apellido: personal.apellido,
       direccion: personal.direccion,
       telefono: personal.telefono,
-      email: personal.email
+      email: personal.email,
+      id_rol: personal.idRol
     })
   })
 
@@ -63,7 +66,8 @@ describe('PersonalParroquial route testing', () => {
       apellido: personal.apellido,
       direccion: personal.direccion,
       telefono: personal.telefono,
-      email: personal.email
+      email: personal.email,
+      personal_rol: expect.any(Object)
     })
   })
 
