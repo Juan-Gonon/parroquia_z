@@ -117,17 +117,17 @@ model lidercomunitario {
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model miembrogrupo {
-  id_miembrogrupo    Int                @id @default(autoincrement())
-  id_personal        Int
-  id_gruposervicio   Int
-  fecha_ini_msia     DateTime           @db.Date
-  fecha_fin_msia     DateTime?          @db.Date
-  roldentrogrupo     String             @db.VarChar(100)
-  activo             Boolean            @default(true)
-  gruposervicio      gruposervicio      @relation(fields: [id_gruposervicio], references: [id_grupo], onDelete: Cascade)
-  personalparroquial personalparroquial @relation(fields: [id_personal], references: [id_personal], onDelete: NoAction)
+  id_miembrogrupo         Int                     @id @default(autoincrement())
+  id_gruposervicio        Int
+  fecha_ini_msia          DateTime                @db.Date
+  fecha_fin_msia          DateTime?               @db.Date
+  roldentrogrupo          String                  @db.VarChar(100)
+  activo                  Boolean                 @default(true)
+  id_part_min             Int
+  participacionministerio participacionministerio @relation(fields: [id_part_min], references: [id_part_min], onDelete: Cascade, map: "fk_miembrogrupo_partmin")
+  gruposervicio           gruposervicio           @relation(fields: [id_gruposervicio], references: [id_grupo], onDelete: Cascade)
 
-  @@unique([id_personal, id_gruposervicio, fecha_ini_msia])
+  @@unique([id_part_min, id_gruposervicio, fecha_ini_msia], map: "uq_miembrogrupo")
 }
 
 model ministerio {
@@ -157,6 +157,7 @@ model participacionministerio {
   fecha_ini_part         DateTime            @db.Date
   fecha_fin_part         DateTime?           @db.Date
   activo                 Boolean             @default(true)
+  miembrogrupo           miembrogrupo[]
   ministerio             ministerio          @relation(fields: [id_ministerio], references: [id_ministerio], onDelete: NoAction)
   personalparroquial     personalparroquial  @relation(fields: [id_personal], references: [id_personal], onDelete: Cascade)
   roldentroministerio    roldentroministerio @relation(fields: [id_roldentroministerio], references: [id_roldentroministerio], onDelete: NoAction)
@@ -182,7 +183,6 @@ model personalparroquial {
   direccion               String?                   @db.VarChar(255)
   evento                  evento[]
   lidercomunitario        lidercomunitario[]
-  miembrogrupo            miembrogrupo[]
   participacionministerio participacionministerio[]
   personal_rol            personal_rol[]
   usuario                 usuario?
