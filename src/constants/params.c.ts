@@ -30,5 +30,6 @@ export const PARAMS_BODY = {
   fecha_inicio: 'fecha_inicio',
   fecha_fin_turno: 'fecha_fin',
   rolPersonal: 'rolPersonal',
-  idRol: 'idRol'
+  idRol: 'idRol',
+  idMinisterio: 'idMinisterio'
 } as const
