@@ -6,8 +6,8 @@ export const PARAMS_BODY = {
   telefono: 'telefono',
   email: 'email',
   descripcion: 'descripcion',
-  fecha_ini: 'fecha_ini',
-  fecha_fin: 'fecha_fin',
+  fechaIni: 'fechaIni',
+  fechaFin: 'fechaFin',
   aceptaintenciones: 'aceptaintenciones',
   requiereinscripcion: 'requiereinscripcion',
   nombrecelebranteexterno: 'nombrecelebranteexterno',
@@ -31,5 +31,8 @@ export const PARAMS_BODY = {
   fecha_fin_turno: 'fecha_fin',
   rolPersonal: 'rolPersonal',
   idRol: 'idRol',
-  idMinisterio: 'idMinisterio'
+  idMinisterio: 'idMinisterio',
+  idComunidad: 'idComunidad',
+  idTipoEvento: 'idTipoEvento',
+  idCelebrante: 'idCelebrante'
 } as const
