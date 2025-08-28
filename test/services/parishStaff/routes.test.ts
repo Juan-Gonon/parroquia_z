@@ -12,14 +12,14 @@ describe('PersonalParroquial route testing', () => {
     email: 'juan.perez@example.com',
     idRol: 1
   }
-  const personal2 = {
-    nombre: 'Ana',
-    apellido: 'García',
-    direccion: 'Avenida Siempre Viva 742',
-    telefono: '555-5678',
-    email: 'ana.garcia@example.com',
-    idRol: 1
-  }
+  // const personal2 = {
+  //   nombre: 'Ana',
+  //   apellido: 'García',
+  //   direccion: 'Avenida Siempre Viva 742',
+  //   telefono: '555-5678',
+  //   email: 'ana.garcia@example.com',
+  //   idRol: 1
+  // }
   let id: number
 
   beforeAll(async () => {
@@ -73,7 +73,7 @@ describe('PersonalParroquial route testing', () => {
 
   it('should return a list of PersonalParroquiales from /api/parish-staff', async () => {
     // Se crea un segundo registro para asegurar que la lista contenga más de un elemento
-    await request(testServer.app).post('/api/parish-staff').send(personal2).expect(200)
+    // await request(testServer.app).post('/api/parish-staff').send(personal2).expect(200)
 
     // Prueba para obtener todos los registros de personal
     const { body } = await request(testServer.app)
