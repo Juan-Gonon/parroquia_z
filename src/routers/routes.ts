@@ -11,6 +11,7 @@ import { RolDentroMinisterioRoutes } from '../presentation/features/roleMinistry
 import { PersonalParroquialRoutes } from '../presentation/features/parishStaff/routes'
 import { GrupoServicioRoutes } from '../presentation/features/serviceGroup/routes'
 import { EventoRoutes } from '../presentation/features/event/route'
+import { ParticipacionMinisterioRoutes } from '../presentation/features/ministyPart/routes'
 
 export class AppRouter {
   static get routes (): Router {
@@ -27,6 +28,7 @@ export class AppRouter {
     router.use('/api/parish-staff', PersonalParroquialRoutes.router)
     router.use('/api/service-group', GrupoServicioRoutes.router)
     router.use('/api/event', EventoRoutes.router)
+    router.use('/api/ministy-participation', ParticipacionMinisterioRoutes.router)
 
     return router
   }

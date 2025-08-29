@@ -34,5 +34,6 @@ export const PARAMS_BODY = {
   idMinisterio: 'idMinisterio',
   idComunidad: 'idComunidad',
   idTipoEvento: 'idTipoEvento',
-  idCelebrante: 'idCelebrante'
+  idCelebrante: 'idCelebrante',
+  idPersonal: 'idPersonal'
 } as const
