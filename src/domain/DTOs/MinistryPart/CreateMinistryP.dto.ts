@@ -30,8 +30,6 @@ export class CreateParticipacionDto {
       activo
     } = object
 
-    console.log(object)
-
     // Se valida que los campos requeridos estén presentes
     if (!idPersonal) return ['Missing idPersonal']
     if (!idMinisterio) return ['Missing idMinisterio']
