@@ -13,6 +13,7 @@ import { GrupoServicioRoutes } from '../presentation/features/serviceGroup/route
 import { EventoRoutes } from '../presentation/features/event/route'
 import { ParticipacionMinisterioRoutes } from '../presentation/features/ministyPart/routes'
 import { MiembroGrupoRoutes } from '../presentation/features/groupMember/routes'
+import { AsigGrupoEventoRoutes } from '../presentation/features/AssingEventGroup/routes'
 
 export class AppRouter {
   static get routes (): Router {
@@ -31,6 +32,7 @@ export class AppRouter {
     router.use('/api/event', EventoRoutes.router)
     router.use('/api/ministy-participation', ParticipacionMinisterioRoutes.router)
     router.use('/api/group-member', MiembroGrupoRoutes.router)
+    router.use('/api/asigeventgroup', AsigGrupoEventoRoutes.router)
 
     return router
   }
