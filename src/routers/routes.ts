@@ -12,6 +12,7 @@ import { PersonalParroquialRoutes } from '../presentation/features/parishStaff/r
 import { GrupoServicioRoutes } from '../presentation/features/serviceGroup/routes'
 import { EventoRoutes } from '../presentation/features/event/route'
 import { ParticipacionMinisterioRoutes } from '../presentation/features/ministyPart/routes'
+import { MiembroGrupoRoutes } from '../presentation/features/groupMember/routes'
 
 export class AppRouter {
   static get routes (): Router {
@@ -29,6 +30,7 @@ export class AppRouter {
     router.use('/api/service-group', GrupoServicioRoutes.router)
     router.use('/api/event', EventoRoutes.router)
     router.use('/api/ministy-participation', ParticipacionMinisterioRoutes.router)
+    router.use('/api/group-member', MiembroGrupoRoutes.router)
 
     return router
   }
