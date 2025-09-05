@@ -80,7 +80,7 @@ export class LiderComunitarioController {
 
     try {
       const message = await this.liderComunitarioService.deleteLider(liderId)
-      return res.status(200).json({ message })
+      return res.status(200).json(message)
     } catch (error) {
       return handleError(error, res)
     }
