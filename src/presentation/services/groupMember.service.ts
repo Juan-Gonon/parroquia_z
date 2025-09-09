@@ -78,7 +78,6 @@ export class MiembroGrupoService {
       })
       return newMiembro
     } catch (error) {
-      console.log(error)
       throw CustomError.internalServer('An error occurred while creating the member.')
     }
   }

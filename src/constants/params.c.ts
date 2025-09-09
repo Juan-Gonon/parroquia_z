@@ -39,6 +39,7 @@ export const PARAMS_BODY = {
   idPartMin: 'idPartMin',
   idGrupoServicio: 'idGrupoServicio',
   idEvento: 'idEvento',
-  idGrpSrv: 'idGrpSrv'
+  idGrpSrv: 'idGrpSrv',
+  idTipoTurno: 'idTipoTurno'
 
 } as const

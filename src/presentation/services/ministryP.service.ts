@@ -120,7 +120,6 @@ export class ParticipacionMinisterioService {
       })
       return updatedParticipacion
     } catch (error) {
-      console.log(error)
       throw CustomError.internalServer('An error occurred while updating the participation.')
     }
   }

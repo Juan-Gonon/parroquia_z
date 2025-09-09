@@ -231,7 +231,7 @@ model turnoliturgocomunitario {
   id_tipo      Int
   fecha_inicio DateTime  @db.Timestamptz(6)
   fecha_fin    DateTime? @db.Timestamptz(6)
-  descripcion  String    @db.VarChar(255)
+  descripcion  String?   @db.VarChar(255)
   comunidad    comunidad @relation(fields: [id_comunidad], references: [id_comunidad], onDelete: NoAction)
   tipoturno    tipoturno @relation(fields: [id_tipo], references: [id_tipo], onDelete: NoAction)
 
