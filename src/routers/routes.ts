@@ -16,6 +16,7 @@ import { MiembroGrupoRoutes } from '../presentation/features/groupMember/routes'
 import { AsigGrupoEventoRoutes } from '../presentation/features/AssingEventGroup/routes'
 import { LiderComunitarioRoutes } from '../presentation/features/comunityLeader/routes'
 import { TurnoLiturgicoComunitarioRoutes } from '../presentation/features/liturgyTurn/routes'
+import { FeligresRoutes } from '../presentation/features/feligres/routes'
 
 export class AppRouter {
   static get routes (): Router {
@@ -37,6 +38,7 @@ export class AppRouter {
     router.use('/api/asigeventgroup', AsigGrupoEventoRoutes.router)
     router.use('/api/comunity-leader', LiderComunitarioRoutes.router)
     router.use('/api/liturgy-turns', TurnoLiturgicoComunitarioRoutes.router)
+    router.use('/api/feligreses', FeligresRoutes.router)
 
     return router
   }

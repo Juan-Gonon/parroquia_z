@@ -12,5 +12,6 @@ export const validationMessages = {
   maxValue: (field: string, max: number) => `The ${field} must be at most ${max}`,
   notInList: (field: string) => `The ${field} must be one of the allowed values`,
   duplicate: (field: string) => `Duplicate value for ${field}`,
-  notFound: (field: string) => `${field} not found`
+  notFound: (field: string) => `${field} not found`,
+  notString: (field: string) => `${field} is not string`
 }
