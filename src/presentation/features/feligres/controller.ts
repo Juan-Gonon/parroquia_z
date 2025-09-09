@@ -46,7 +46,7 @@ export class FeligresController {
     }
     try {
       const feligres = await this.service.createFeligres(createDto!)
-      return res.status(201).json(feligres)
+      return res.status(200).json(feligres)
     } catch (error) {
       return handleError(error, res)
     }
