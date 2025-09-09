@@ -46,7 +46,7 @@ export class TurnoLiturgicoComunitarioController {
     }
     try {
       const turno = await this.service.createTurno(createDto!)
-      return res.status(201).json(turno)
+      return res.status(200).json(turno)
     } catch (error) {
       return handleError(error, res)
     }
@@ -72,7 +72,7 @@ export class TurnoLiturgicoComunitarioController {
     }
     try {
       const message = await this.service.deleteTurno(id)
-      return res.status(200).json({ message })
+      return res.status(200).json(message)
     } catch (error) {
       return handleError(error, res)
     }
