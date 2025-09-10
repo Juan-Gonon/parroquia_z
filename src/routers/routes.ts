@@ -17,6 +17,7 @@ import { AsigGrupoEventoRoutes } from '../presentation/features/AssingEventGroup
 import { LiderComunitarioRoutes } from '../presentation/features/comunityLeader/routes'
 import { TurnoLiturgicoComunitarioRoutes } from '../presentation/features/liturgyTurn/routes'
 import { FeligresRoutes } from '../presentation/features/feligres/routes'
+import { IntencionRoutes } from '../presentation/features/intention/routes'
 
 export class AppRouter {
   static get routes (): Router {
@@ -39,6 +40,7 @@ export class AppRouter {
     router.use('/api/comunity-leader', LiderComunitarioRoutes.router)
     router.use('/api/liturgy-turns', TurnoLiturgicoComunitarioRoutes.router)
     router.use('/api/feligreses', FeligresRoutes.router)
+    router.use('/api/intention', IntencionRoutes.router)
 
     return router
   }

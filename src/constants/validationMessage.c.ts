@@ -13,5 +13,6 @@ export const validationMessages = {
   notInList: (field: string) => `The ${field} must be one of the allowed values`,
   duplicate: (field: string) => `Duplicate value for ${field}`,
   notFound: (field: string) => `${field} not found`,
-  notString: (field: string) => `${field} is not string`
+  notString: (field: string) => `${field} must be a string`,
+  notDecimal: (field: string) => `${field} must be a decimal number`
 }

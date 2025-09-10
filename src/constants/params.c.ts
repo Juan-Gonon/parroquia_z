@@ -40,6 +40,12 @@ export const PARAMS_BODY = {
   idGrupoServicio: 'idGrupoServicio',
   idEvento: 'idEvento',
   idGrpSrv: 'idGrpSrv',
-  idTipoTurno: 'idTipoTurno'
+  idTipoTurno: 'idTipoTurno',
+  idFeligres: 'idFeligres',
+  idTipoIntencion: 'idTipoIntencion',
+  idEstadoIntencion: 'idEstadoIntencion',
+  montoOfrenda: 'montoOfrenda',
+  montoPagado: 'montoPagado',
+  fechaPago: 'fechaPago'
 
 } as const
