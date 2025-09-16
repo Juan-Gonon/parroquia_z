@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/comma-dangle */
+/* eslint-disable @typescript-eslint/space-before-function-paren */
 import express, { Router } from 'express'
+import cors from 'cors'
 
 interface Options {
   port: number
@@ -13,7 +16,7 @@ export class Server {
   private readonly routes: Router
   private serverListener?: any
 
-  constructor ({ port, publicPath, routes }: Options) {
+  constructor({ port, publicPath, routes }: Options) {
     this.PORT = port
     this.PUBLIC_PATH = publicPath
     this.routes = routes
@@ -26,6 +29,13 @@ export class Server {
 
     this.app.use(express.static(this.PUBLIC_PATH))
 
+    this.app.use(
+      cors({
+        origin: 'http://localhost:5173', // frontend Vite
+        credentials: true, // cookies o headers de auth
+      })
+    )
+
     this.app.use(this.routes)
 
     this.serverListener = this.app.listen(this.PORT, () => {
@@ -33,7 +43,7 @@ export class Server {
     })
   }
 
-  public close (): void {
+  public close(): void {
     this.serverListener?.close()
   }
 }
