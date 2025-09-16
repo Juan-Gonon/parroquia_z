@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/comma-dangle */
+/* eslint-disable @typescript-eslint/space-before-function-paren */
 /* eslint-disable @typescript-eslint/no-extraneous-class */
 import { Router } from 'express'
 import { param, body } from 'express-validator'
@@ -6,12 +8,15 @@ import { validationMessages } from '../../../constants/validationMessage.c'
 import { ValidateFields } from '../../middleware/ValidateFields'
 import { EventoService } from '../../services/event.service'
 import { EventoController } from './controller'
+import { ValidateJWT } from '../../middleware/validateJWT'
 
 export class EventoRoutes {
-  static get router (): Router {
+  static get router(): Router {
     const router = Router()
     const eventoService = new EventoService()
     const controller = new EventoController(eventoService)
+
+    router.use(ValidateJWT.validate)
 
     // Ruta para obtener todos los eventos
     router.get('/', controller.getAllEvents)
@@ -23,7 +28,7 @@ export class EventoRoutes {
         param(PARAMS_BODY.id)
           .isInt()
           .withMessage(validationMessages.notInteger('id_evento')),
-        ValidateFields.validate
+        ValidateFields.validate,
       ],
       controller.getEventById
     )
@@ -52,17 +57,23 @@ export class EventoRoutes {
         body(PARAMS_BODY.aceptaintenciones)
           .optional()
           .isBoolean()
-          .withMessage(validationMessages.notBoolean(PARAMS_BODY.aceptaintenciones)),
+          .withMessage(
+            validationMessages.notBoolean(PARAMS_BODY.aceptaintenciones)
+          ),
         body(PARAMS_BODY.requiereinscripcion)
           .optional()
           .isBoolean()
-          .withMessage(validationMessages.notBoolean(PARAMS_BODY.requiereinscripcion)),
+          .withMessage(
+            validationMessages.notBoolean(PARAMS_BODY.requiereinscripcion)
+          ),
         body(PARAMS_BODY.idCelebrante)
           .optional({ checkFalsy: true })
           .isInt()
           .withMessage(validationMessages.notInteger(PARAMS_BODY.idCelebrante)),
-        body(PARAMS_BODY.nombrecelebranteexterno).optional({ checkFalsy: true }),
-        ValidateFields.validate
+        body(PARAMS_BODY.nombrecelebranteexterno).optional({
+          checkFalsy: true,
+        }),
+        ValidateFields.validate,
       ],
       controller.createEvent
     )
@@ -95,17 +106,23 @@ export class EventoRoutes {
         body(PARAMS_BODY.aceptaintenciones)
           .optional()
           .isBoolean()
-          .withMessage(validationMessages.notBoolean(PARAMS_BODY.aceptaintenciones)),
+          .withMessage(
+            validationMessages.notBoolean(PARAMS_BODY.aceptaintenciones)
+          ),
         body(PARAMS_BODY.requiereinscripcion)
           .optional()
           .isBoolean()
-          .withMessage(validationMessages.notBoolean(PARAMS_BODY.requiereinscripcion)),
+          .withMessage(
+            validationMessages.notBoolean(PARAMS_BODY.requiereinscripcion)
+          ),
         body(PARAMS_BODY.idCelebrante)
           .optional({ checkFalsy: true })
           .isInt()
           .withMessage(validationMessages.notInteger(PARAMS_BODY.idCelebrante)),
-        body(PARAMS_BODY.nombrecelebranteexterno).optional({ checkFalsy: true }),
-        ValidateFields.validate
+        body(PARAMS_BODY.nombrecelebranteexterno).optional({
+          checkFalsy: true,
+        }),
+        ValidateFields.validate,
       ],
       controller.updateEvent
     )
@@ -117,7 +134,7 @@ export class EventoRoutes {
         param(PARAMS_BODY.id)
           .isInt()
           .withMessage(validationMessages.notInteger('id_evento')),
-        ValidateFields.validate
+        ValidateFields.validate,
       ],
       controller.deleteEvent
     )

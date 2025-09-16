@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/comma-dangle */
+/* eslint-disable @typescript-eslint/space-before-function-paren */
 /* eslint-disable @typescript-eslint/no-extraneous-class */
 import { Router } from 'express'
 import { param, body } from 'express-validator'
@@ -6,13 +8,18 @@ import { validationMessages } from '../../../constants/validationMessage.c'
 import { ValidateFields } from '../../middleware/ValidateFields'
 import { RolDentroMinisterioService } from '../../services/roleMinistery.service'
 import { RolDentroMinisterioController } from './controller'
+import { ValidateJWT } from '../../middleware/validateJWT'
 
 export class RolDentroMinisterioRoutes {
   // Define un método estático para obtener el router
-  static get router (): Router {
+  static get router(): Router {
     const router = Router()
     const rolDentroMinisterioService = new RolDentroMinisterioService()
-    const controller = new RolDentroMinisterioController(rolDentroMinisterioService)
+    const controller = new RolDentroMinisterioController(
+      rolDentroMinisterioService
+    )
+
+    router.use(ValidateJWT.validate)
 
     // Ruta para obtener todos los roles dentro de un ministerio
     router.get('/', controller.getAllRoles)
@@ -23,7 +30,7 @@ export class RolDentroMinisterioRoutes {
         param(PARAMS_BODY.id)
           .isInt()
           .withMessage(validationMessages.notInteger('id_roldentroministerio')),
-        ValidateFields.validate
+        ValidateFields.validate,
       ],
       controller.getRolById
     )
@@ -36,7 +43,7 @@ export class RolDentroMinisterioRoutes {
           .notEmpty()
           .withMessage(validationMessages.required(PARAMS_BODY.nombre)),
         body(PARAMS_BODY.descripcion).optional(),
-        ValidateFields.validate
+        ValidateFields.validate,
       ],
       controller.createRol
     )
@@ -52,7 +59,7 @@ export class RolDentroMinisterioRoutes {
           .notEmpty()
           .withMessage(validationMessages.required(PARAMS_BODY.nombre)),
         body(PARAMS_BODY.descripcion).optional(),
-        ValidateFields.validate
+        ValidateFields.validate,
       ],
       controller.updateRol
     )
@@ -64,7 +71,7 @@ export class RolDentroMinisterioRoutes {
         param(PARAMS_BODY.id)
           .isInt()
           .withMessage(validationMessages.notInteger('id_roldentroministerio')),
-        ValidateFields.validate
+        ValidateFields.validate,
       ],
       controller.deleteRol
     )

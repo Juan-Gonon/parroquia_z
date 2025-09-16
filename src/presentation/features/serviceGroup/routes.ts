@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/space-before-function-paren */
+/* eslint-disable @typescript-eslint/comma-dangle */
 /* eslint-disable @typescript-eslint/no-extraneous-class */
 import { Router } from 'express'
 import { param, body } from 'express-validator'
@@ -6,12 +8,15 @@ import { validationMessages } from '../../../constants/validationMessage.c'
 import { GrupoServicioController } from './controller'
 import { ValidateFields } from '../../middleware/ValidateFields'
 import { GrupoServicioService } from '../../services/serviceGroup.service'
+import { ValidateJWT } from '../../middleware/validateJWT'
 
 export class GrupoServicioRoutes {
-  static get router (): Router {
+  static get router(): Router {
     const router = Router()
     const grupoServicioService = new GrupoServicioService()
     const controller = new GrupoServicioController(grupoServicioService)
+
+    router.use(ValidateJWT.validate)
 
     // Ruta para obtener todos los grupos de servicio
     router.get('/', controller.getAllGroups)
@@ -23,7 +28,7 @@ export class GrupoServicioRoutes {
         param(PARAMS_BODY.id)
           .isInt()
           .withMessage(validationMessages.notInteger('id_grupo')),
-        ValidateFields.validate
+        ValidateFields.validate,
       ],
       controller.getGroupById
     )
@@ -41,9 +46,10 @@ export class GrupoServicioRoutes {
           .isBoolean()
           .withMessage(validationMessages.notBoolean(PARAMS_BODY.activo)),
         body(PARAMS_BODY.idMinisterio)
-          .notEmpty().isInt()
+          .notEmpty()
+          .isInt()
           .withMessage(validationMessages.required(PARAMS_BODY.idMinisterio)),
-        ValidateFields.validate
+        ValidateFields.validate,
       ],
       controller.createGroup
     )
@@ -62,9 +68,10 @@ export class GrupoServicioRoutes {
           .isBoolean()
           .withMessage(validationMessages.notBoolean(PARAMS_BODY.activo)),
         body(PARAMS_BODY.idMinisterio)
-          .optional().isInt()
+          .optional()
+          .isInt()
           .withMessage(validationMessages.notInteger(PARAMS_BODY.idMinisterio)),
-        ValidateFields.validate
+        ValidateFields.validate,
       ],
       controller.updateGroup
     )
@@ -76,7 +83,7 @@ export class GrupoServicioRoutes {
         param(PARAMS_BODY.id)
           .isInt()
           .withMessage(validationMessages.notInteger('id_grupo')),
-        ValidateFields.validate
+        ValidateFields.validate,
       ],
       controller.deleteGroup
     )

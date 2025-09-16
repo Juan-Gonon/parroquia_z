@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/comma-dangle */
+/* eslint-disable @typescript-eslint/space-before-function-paren */
 /* eslint-disable @typescript-eslint/no-extraneous-class */
 import { Router } from 'express'
 import { param, body } from 'express-validator'
@@ -6,12 +8,17 @@ import { validationMessages } from '../../../constants/validationMessage.c'
 import { ValidateFields } from '../../middleware/ValidateFields'
 import { ParticipacionMinisterioController } from './controller'
 import { ParticipacionMinisterioService } from '../../services/ministryP.service'
+import { ValidateJWT } from '../../middleware/validateJWT'
 
 export class ParticipacionMinisterioRoutes {
-  static get router (): Router {
+  static get router(): Router {
     const router = Router()
     const participacionMinisterioService = new ParticipacionMinisterioService()
-    const controller = new ParticipacionMinisterioController(participacionMinisterioService)
+    const controller = new ParticipacionMinisterioController(
+      participacionMinisterioService
+    )
+
+    router.use(ValidateJWT.validate)
 
     // Ruta para obtener todas las participaciones de ministerio
     router.get('/', controller.getAllParticipaciones)
@@ -23,7 +30,7 @@ export class ParticipacionMinisterioRoutes {
         param(PARAMS_BODY.id)
           .isInt()
           .withMessage(validationMessages.notInteger('id_part_min')),
-        ValidateFields.validate
+        ValidateFields.validate,
       ],
       controller.getParticipacionById
     )
@@ -52,7 +59,7 @@ export class ParticipacionMinisterioRoutes {
           .optional()
           .isBoolean()
           .withMessage(validationMessages.notBoolean(PARAMS_BODY.activo)),
-        ValidateFields.validate
+        ValidateFields.validate,
       ],
       controller.createParticipacion
     )
@@ -88,7 +95,7 @@ export class ParticipacionMinisterioRoutes {
           .optional()
           .isBoolean()
           .withMessage(validationMessages.notBoolean(PARAMS_BODY.activo)),
-        ValidateFields.validate
+        ValidateFields.validate,
       ],
       controller.updateParticipacion
     )
@@ -100,7 +107,7 @@ export class ParticipacionMinisterioRoutes {
         param(PARAMS_BODY.id)
           .isInt()
           .withMessage(validationMessages.notInteger('id_part_min')),
-        ValidateFields.validate
+        ValidateFields.validate,
       ],
       controller.deleteParticipacion
     )

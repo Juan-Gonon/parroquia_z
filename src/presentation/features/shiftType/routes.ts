@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/comma-dangle */
+/* eslint-disable @typescript-eslint/space-before-function-paren */
 /* eslint-disable @typescript-eslint/no-extraneous-class */
 import { Router } from 'express'
 import { param, body } from 'express-validator'
@@ -6,13 +8,15 @@ import { validationMessages } from '../../../constants/validationMessage.c'
 import { ValidateFields } from '../../middleware/ValidateFields'
 import { TipoTurnoController } from './controller'
 import { TipoTurnoService } from '../../services/tipoTurno.service'
+import { ValidateJWT } from '../../middleware/validateJWT'
 
 export class TipoTurnoRoutes {
-  static get router (): Router {
+  static get router(): Router {
     const router = Router()
     const tipoTurnoService = new TipoTurnoService()
     const controller = new TipoTurnoController(tipoTurnoService)
 
+    router.use(ValidateJWT.validate)
     router.get('/', controller.getAllTipoTurnos)
     router.get(
       '/:id',
@@ -20,7 +24,7 @@ export class TipoTurnoRoutes {
         param(PARAMS_BODY.id)
           .isInt()
           .withMessage(validationMessages.notInteger('id_tipo')),
-        ValidateFields.validate
+        ValidateFields.validate,
       ],
       controller.getTipoTurnoById
     )
@@ -31,7 +35,7 @@ export class TipoTurnoRoutes {
           .notEmpty()
           .withMessage(validationMessages.required(PARAMS_BODY.nombre)),
         body(PARAMS_BODY.descripcion).optional(),
-        ValidateFields.validate
+        ValidateFields.validate,
       ],
       controller.createTipoTurno
     )
@@ -46,7 +50,7 @@ export class TipoTurnoRoutes {
           .notEmpty()
           .withMessage(validationMessages.required(PARAMS_BODY.nombre)),
         body(PARAMS_BODY.descripcion).optional(),
-        ValidateFields.validate
+        ValidateFields.validate,
       ],
       controller.updateTipoTurno
     )
@@ -56,7 +60,7 @@ export class TipoTurnoRoutes {
         param(PARAMS_BODY.id)
           .isInt()
           .withMessage(validationMessages.notInteger('id_tipo')),
-        ValidateFields.validate
+        ValidateFields.validate,
       ],
       controller.deleteTipoTurno
     )

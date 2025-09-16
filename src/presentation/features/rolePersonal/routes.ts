@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/comma-dangle */
+/* eslint-disable @typescript-eslint/space-before-function-paren */
 /* eslint-disable @typescript-eslint/no-extraneous-class */
 import { Router } from 'express'
 import { param, body } from 'express-validator'
@@ -6,12 +8,15 @@ import { validationMessages } from '../../../constants/validationMessage.c'
 import { ValidateFields } from '../../middleware/ValidateFields'
 import { RolPersonalController } from './controller'
 import { RolPersonalService } from '../../services/RolPersonal.service'
+import { ValidateJWT } from '../../middleware/validateJWT'
 
 export class RolPersonalRoutes {
-  static get router (): Router {
+  static get router(): Router {
     const router = Router()
     const rolPersonalService = new RolPersonalService()
     const controller = new RolPersonalController(rolPersonalService)
+
+    router.use(ValidateJWT.validate)
 
     // Ruta para obtener todos los roles de personal
     router.get('/', controller.getAllRoles)
@@ -23,7 +28,7 @@ export class RolPersonalRoutes {
         param(PARAMS_BODY.id)
           .isInt()
           .withMessage(validationMessages.notInteger('id_rol')),
-        ValidateFields.validate
+        ValidateFields.validate,
       ],
       controller.getRolById
     )
@@ -40,7 +45,7 @@ export class RolPersonalRoutes {
           .optional()
           .isString()
           .withMessage('The "permisos" field must be a string.'),
-        ValidateFields.validate
+        ValidateFields.validate,
       ],
       controller.createRol
     )
@@ -61,7 +66,7 @@ export class RolPersonalRoutes {
           .optional()
           .isString()
           .withMessage('The "permisos" field must be a string.'),
-        ValidateFields.validate
+        ValidateFields.validate,
       ],
       controller.updateRol
     )
@@ -73,7 +78,7 @@ export class RolPersonalRoutes {
         param(PARAMS_BODY.id)
           .isInt()
           .withMessage(validationMessages.notInteger('id_rol')),
-        ValidateFields.validate
+        ValidateFields.validate,
       ],
       controller.deleteRol
     )

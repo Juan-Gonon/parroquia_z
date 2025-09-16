@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/space-before-function-paren */
+/* eslint-disable @typescript-eslint/comma-dangle */
 /* eslint-disable @typescript-eslint/no-extraneous-class */
 import { Router } from 'express'
 import { param, body } from 'express-validator'
@@ -6,12 +8,17 @@ import { validationMessages } from '../../../constants/validationMessage.c'
 import { ValidateFields } from '../../middleware/ValidateFields'
 import { PersonalParroquialService } from '../../services/parishStaff.service'
 import { PersonalParroquialController } from './controller'
+import { ValidateJWT } from '../../middleware/validateJWT'
 
 export class PersonalParroquialRoutes {
-  static get router (): Router {
+  static get router(): Router {
     const router = Router()
     const personalParroquialService = new PersonalParroquialService()
-    const controller = new PersonalParroquialController(personalParroquialService)
+    const controller = new PersonalParroquialController(
+      personalParroquialService
+    )
+
+    router.use(ValidateJWT.validate)
 
     // Ruta para obtener todo el personal parroquial
     router.get('/', controller.getAllPersonal)
@@ -23,7 +30,7 @@ export class PersonalParroquialRoutes {
         param(PARAMS_BODY.id)
           .isInt()
           .withMessage(validationMessages.notInteger('id_personal')),
-        ValidateFields.validate
+        ValidateFields.validate,
       ],
       controller.getPersonalById
     )
@@ -45,9 +52,10 @@ export class PersonalParroquialRoutes {
           .isEmail()
           .withMessage(validationMessages.invalidEmail(PARAMS_BODY.email)),
         body(PARAMS_BODY.idRol)
-          .notEmpty().isInt()
+          .notEmpty()
+          .isInt()
           .withMessage(validationMessages.required(PARAMS_BODY.idRol)),
-        ValidateFields.validate
+        ValidateFields.validate,
       ],
       controller.createPersonal
     )
@@ -68,9 +76,10 @@ export class PersonalParroquialRoutes {
           .isEmail()
           .withMessage(validationMessages.invalidEmail(PARAMS_BODY.email)),
         body(PARAMS_BODY.idRol)
-          .optional().isInt()
+          .optional()
+          .isInt()
           .withMessage(validationMessages.required(PARAMS_BODY.idRol)),
-        ValidateFields.validate
+        ValidateFields.validate,
       ],
       controller.updatePersonal
     )
@@ -82,7 +91,7 @@ export class PersonalParroquialRoutes {
         param(PARAMS_BODY.id)
           .isInt()
           .withMessage(validationMessages.notInteger('id_personal')),
-        ValidateFields.validate
+        ValidateFields.validate,
       ],
       controller.deletePersonal
     )

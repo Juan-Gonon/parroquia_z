@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/comma-dangle */
+/* eslint-disable @typescript-eslint/space-before-function-paren */
 /* eslint-disable @typescript-eslint/no-extraneous-class */
 import { Router } from 'express'
 import { param, body } from 'express-validator'
@@ -6,14 +8,17 @@ import { validationMessages } from '../../../constants/validationMessage.c'
 import { ValidateFields } from '../../middleware/ValidateFields'
 import { TipoEventoController } from './controller'
 import { TipoEventoService } from '../../services/eventType.service'
+import { ValidateJWT } from '../../middleware/validateJWT'
 
 // Clase que contiene las rutas para la gestión de TipoEvento
 export class EventTypeRoutes {
   // Define un método estático para obtener el router
-  static get router (): Router {
+  static get router(): Router {
     const router = Router()
     const tipoEventoService = new TipoEventoService()
     const controller = new TipoEventoController(tipoEventoService)
+
+    router.use(ValidateJWT.validate)
 
     // Ruta para obtener todos los tipos de evento
     router.get('/', controller.getAllTipoEventos)
@@ -25,7 +30,7 @@ export class EventTypeRoutes {
         param(PARAMS_BODY.id)
           .isInt()
           .withMessage(validationMessages.notInteger('id_tipo')),
-        ValidateFields.validate
+        ValidateFields.validate,
       ],
       controller.getTipoEventoById
     )
@@ -38,7 +43,7 @@ export class EventTypeRoutes {
           .notEmpty()
           .withMessage(validationMessages.required(PARAMS_BODY.nombre)),
         body(PARAMS_BODY.descripcion).optional().notEmpty(),
-        ValidateFields.validate
+        ValidateFields.validate,
       ],
       controller.createTipoEvento
     )
@@ -55,7 +60,7 @@ export class EventTypeRoutes {
           .notEmpty()
           .withMessage(validationMessages.required(PARAMS_BODY.nombre)),
         body(PARAMS_BODY.descripcion).optional().notEmpty(),
-        ValidateFields.validate
+        ValidateFields.validate,
       ],
       controller.updateTipoEvento
     )
@@ -68,7 +73,7 @@ export class EventTypeRoutes {
         param(PARAMS_BODY.id)
           .isInt()
           .withMessage(validationMessages.notInteger('id_tipo')),
-        ValidateFields.validate
+        ValidateFields.validate,
       ],
       controller.deleteTipoEvento
     )

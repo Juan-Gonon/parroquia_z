@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-throw-literal */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { NextFunction, Response } from 'express'
 import { CustomError, handleError } from '../../domain'
@@ -7,7 +8,11 @@ import { AuthenticatedRequest, payloadJWT } from '../../types/user'
 
 /* eslint-disable @typescript-eslint/no-extraneous-class */
 export class ValidateJWT {
-  static async validate (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<Response | any> {
+  static async validate(
+    req: AuthenticatedRequest,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | any> {
     //  console.log(req.headers.authorization)
     const authorization = req.headers.authorization
 
@@ -28,8 +33,8 @@ export class ValidateJWT {
 
       const userFromDb = await prisma.usuario.findFirst({
         where: {
-          id_usuario: payload.idUsuario
-        }
+          id_usuario: payload.idUsuario,
+        },
       })
 
       if (!userFromDb) throw CustomError.unAuthorized('Invalid token user')
@@ -37,11 +42,11 @@ export class ValidateJWT {
       const { id_usuario: idUsuario, usuarioacceso } = userFromDb
       req.user = {
         idUsuario,
-        usuarioacceso
+        usuarioacceso,
       }
       return next()
     } catch (error) {
-      return handleError(error, res)
+      throw handleError(error, res)
     }
   }
 }
