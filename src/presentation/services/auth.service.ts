@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/space-before-function-paren */
+/* eslint-disable @typescript-eslint/comma-dangle */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { bcryptAdapter, JwtAdapter } from '../../config'
 import { prisma } from '../../data/postgress'
@@ -5,17 +7,19 @@ import { CustomError, LoginUserDTO, UserEntity } from '../../domain'
 import { UserServiceR, payloadJWT } from '../../types/user'
 
 export class AuthService {
-  public async findOneUser (user: string): Promise<UserEntity | null> {
+  public async findOneUser(user: string): Promise<UserEntity | null> {
     const userExist = await prisma.usuario.findUnique({
       where: {
-        usuarioacceso: user
-      }
+        usuarioacceso: user,
+      },
     })
 
     return userExist !== null ? UserEntity.fromObject(userExist) : null
   }
 
-  public async loginUser (loginUserDTO: LoginUserDTO): Promise<UserServiceR | null> {
+  public async loginUser(
+    loginUserDTO: LoginUserDTO
+  ): Promise<UserServiceR | null> {
     try {
       const user = await this.findOneUser(loginUserDTO.user)
 
@@ -35,18 +39,20 @@ export class AuthService {
 
       return {
         ...userEntity,
-        token
+        token,
       }
     } catch (error) {
-      if (error instanceof Error) {
-        throw CustomError.internalServer(error.message)
+      if (error instanceof CustomError) {
+        throw error
       }
 
       throw CustomError.internalServer('Unknown error')
     }
   }
 
-  public async revalidateTokenS (payload: payloadJWT): Promise<UserServiceR | null> {
+  public async revalidateTokenS(
+    payload: payloadJWT
+  ): Promise<UserServiceR | null> {
     try {
       const user = await this.findOneUser(payload.usuarioacceso)
 
@@ -59,7 +65,7 @@ export class AuthService {
 
       return {
         ...userEntity,
-        token
+        token,
       }
     } catch (error) {
       if (error instanceof CustomError) throw error
