@@ -60,6 +60,16 @@ export class PersonalParroquialService {
                 },
               },
             },
+
+            participacionministerio: {
+              include: {
+                ministerio: {
+                  select: {
+                    nombre: true,
+                  },
+                },
+              },
+            },
           },
         }),
       ])
