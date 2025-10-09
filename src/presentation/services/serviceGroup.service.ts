@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/comma-dangle */
+/* eslint-disable @typescript-eslint/space-before-function-paren */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
@@ -38,6 +40,13 @@ export class GrupoServicioService {
         prisma.gruposervicio.findMany({
           skip: (page - 1) * limit,
           take: limit,
+          include: {
+            ministerio: {
+              select: {
+                nombre: true,
+              },
+            },
+          },
         }),
       ])
 
