@@ -1,3 +1,6 @@
+/* eslint-disable curly */
+/* eslint-disable @typescript-eslint/comma-dangle */
+/* eslint-disable @typescript-eslint/space-before-function-paren */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 
@@ -11,7 +14,7 @@ export interface CreateLiderComunitarioDtoBody {
 }
 
 export class CreateLiderComunitarioDto {
-  private constructor (
+  private constructor(
     public readonly idPersonal: number,
     public readonly idComunidad: number,
     public readonly rolliderazgo: string,
@@ -20,13 +23,24 @@ export class CreateLiderComunitarioDto {
     public readonly activo?: boolean
   ) {}
 
-  static create (object: CreateLiderComunitarioDtoBody): [string?, CreateLiderComunitarioDto?] {
-    const { idPersonal, idComunidad, rolliderazgo, fechaIni, fechaFin, activo } = object
+  static create(
+    object: CreateLiderComunitarioDtoBody
+  ): [string?, CreateLiderComunitarioDto?] {
+    const {
+      idPersonal,
+      idComunidad,
+      rolliderazgo,
+      fechaIni,
+      fechaFin,
+      activo,
+    } = object
     const errors: string[] = []
 
     // Validar campos obligatorios
-    if (idPersonal === undefined || idPersonal === null) return ['id_personal is requerid']
-    if (idComunidad === undefined || idComunidad === null) return ['id_comunidad is requerid']
+    if (idPersonal === undefined || idPersonal === null)
+      return ['id_personal is requerid']
+    if (idComunidad === undefined || idComunidad === null)
+      return ['id_comunidad is requerid']
     if (!rolliderazgo) return ['The rolliderazgo is required']
     if (!fechaIni) return ['Fecha is requerid']
 
@@ -41,13 +55,16 @@ export class CreateLiderComunitarioDto {
       return [errors.join(', ')]
     }
 
-    return [undefined!, new CreateLiderComunitarioDto(
-      idPersonal,
-      idComunidad,
-      rolliderazgo,
-      fechaIniP,
-      fechaFinP,
-      activo
-    )]
+    return [
+      undefined!,
+      new CreateLiderComunitarioDto(
+        +idPersonal,
+        +idComunidad,
+        rolliderazgo,
+        fechaIniP,
+        fechaFinP,
+        activo
+      ),
+    ]
   }
 }
