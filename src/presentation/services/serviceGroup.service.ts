@@ -23,6 +23,13 @@ export class GrupoServicioService {
   public async getGroupById(id: number): Promise<any> {
     const group = await prisma.gruposervicio.findUnique({
       where: { id_grupo: id },
+      include: {
+        ministerio: {
+          select: {
+            nombre: true,
+          },
+        },
+      },
     })
     if (group == null) {
       throw CustomError.badRequest('The requested GrupoServicio was not found.')
