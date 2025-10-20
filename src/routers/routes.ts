@@ -18,9 +18,11 @@ import { LiderComunitarioRoutes } from '../presentation/features/comunityLeader/
 import { TurnoLiturgicoComunitarioRoutes } from '../presentation/features/liturgyTurn/routes'
 import { FeligresRoutes } from '../presentation/features/feligres/routes'
 import { IntencionRoutes } from '../presentation/features/intention/routes'
+import { StateIntentionRoutes } from '../presentation/features/stateIntention/routes'
 
 export class AppRouter {
-  static get routes (): Router {
+  // eslint-disable-next-line @typescript-eslint/space-before-function-paren
+  static get routes(): Router {
     const router = Router()
 
     router.use('/api/auth', AuthRoutes.routes)
@@ -34,13 +36,17 @@ export class AppRouter {
     router.use('/api/parish-staff', PersonalParroquialRoutes.router)
     router.use('/api/service-group', GrupoServicioRoutes.router)
     router.use('/api/event', EventoRoutes.router)
-    router.use('/api/ministy-participation', ParticipacionMinisterioRoutes.router)
+    router.use(
+      '/api/ministy-participation',
+      ParticipacionMinisterioRoutes.router
+    )
     router.use('/api/group-member', MiembroGrupoRoutes.router)
     router.use('/api/asigeventgroup', AsigGrupoEventoRoutes.router)
     router.use('/api/comunity-leader', LiderComunitarioRoutes.router)
     router.use('/api/liturgy-turns', TurnoLiturgicoComunitarioRoutes.router)
     router.use('/api/feligreses', FeligresRoutes.router)
     router.use('/api/intention', IntencionRoutes.router)
+    router.use('/api/state-intention', StateIntentionRoutes.router)
 
     return router
   }
