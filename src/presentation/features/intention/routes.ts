@@ -94,27 +94,22 @@ export class IntencionRoutes {
           .isInt()
           .withMessage(validationMessages.notInteger(PARAMS_BODY.id)),
         body(PARAMS_BODY.idFeligres)
-          .optional()
           .isInt()
           .withMessage(validationMessages.notInteger(PARAMS_BODY.idFeligres)),
         body(PARAMS_BODY.idEvento)
-          .optional({ checkFalsy: true })
           .isInt()
           .withMessage(validationMessages.notInteger(PARAMS_BODY.idEvento)),
         body(PARAMS_BODY.idTipoIntencion)
-          .optional()
           .isInt()
           .withMessage(
             validationMessages.notInteger(PARAMS_BODY.idTipoIntencion)
           ),
         body(PARAMS_BODY.idEstadoIntencion)
-          .optional()
           .isInt()
           .withMessage(
             validationMessages.notInteger(PARAMS_BODY.idEstadoIntencion)
           ),
         body(PARAMS_BODY.descripcion)
-          .optional()
           .isString()
           .withMessage(validationMessages.notString(PARAMS_BODY.descripcion)),
         body(PARAMS_BODY.montoOfrenda)
