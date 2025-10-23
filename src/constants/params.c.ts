@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/comma-dangle */
 export const PARAMS_BODY = {
   id: 'id',
   notas: 'notas',
@@ -46,6 +47,7 @@ export const PARAMS_BODY = {
   idEstadoIntencion: 'idEstadoIntencion',
   montoOfrenda: 'montoOfrenda',
   montoPagado: 'montoPagado',
-  fechaPago: 'fechaPago'
-
+  fechaPago: 'fechaPago',
+  year: 'year',
+  month: 'month',
 } as const

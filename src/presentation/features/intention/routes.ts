@@ -20,6 +20,8 @@ export class IntencionRoutes {
 
     router.get('/', controller.getAll)
 
+    router.get('/by-month/:year/:month', controller.getByMonth)
+
     router.get(
       '/:id',
       [

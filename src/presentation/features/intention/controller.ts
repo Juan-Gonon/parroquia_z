@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/comma-dangle */
+/* eslint-disable @typescript-eslint/space-before-function-paren */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
@@ -8,11 +10,12 @@ import { UpdateIntencionDto } from '../../../domain/DTOs/intention/UpdateIntenti
 import { IntencionService } from '../../services/intention.service'
 
 export class IntencionController {
-  constructor (
-    private readonly service: IntencionService
-  ) { }
+  constructor(private readonly service: IntencionService) {}
 
-  public readonly getAll = async (req: Request, res: Response): Promise<Response> => {
+  public readonly getAll = async (
+    req: Request,
+    res: Response
+  ): Promise<Response> => {
     const { page = 1, limit = 10 } = req.query
 
     const [error, paginationDTO] = PaginationDto.create(+page, +limit)
@@ -26,10 +29,37 @@ export class IntencionController {
     }
   }
 
-  public readonly getById = async (req: Request, res: Response): Promise<Response> => {
+  public getByMonth = async (
+    req: Request,
+    res: Response
+  ): Promise<Response> => {
+    const { year, month } = req.params
+
+    const yearNum = parseInt(year!)
+    const monthNum = parseInt(month!)
+
+    if (isNaN(yearNum) || isNaN(monthNum) || monthNum < 1 || monthNum > 12) {
+      return res.status(400).json({ message: 'Invalid year or month' })
+    }
+
+    try {
+      const result = await this.service.getIntencionesByMonth(yearNum, monthNum)
+      return res.json(result)
+    } catch (error) {
+      return handleError(error, res)
+    }
+  }
+
+  public readonly getById = async (
+    req: Request,
+    res: Response
+  ): Promise<Response> => {
     const id = +req.params.id!
     if (isNaN(id)) {
-      return handleError(CustomError.badRequest('The id contains invalid characters'), res)
+      return handleError(
+        CustomError.badRequest('The id contains invalid characters'),
+        res
+      )
     }
     try {
       const intencion = await this.service.getIntencionById(id)
@@ -39,7 +69,10 @@ export class IntencionController {
     }
   }
 
-  public readonly create = async (req: Request, res: Response): Promise<Response> => {
+  public readonly create = async (
+    req: Request,
+    res: Response
+  ): Promise<Response> => {
     const [error, createDto] = CreateIntencionDto.create(req.body)
     if (error) {
       return handleError(CustomError.badRequest(error), res)
@@ -52,8 +85,14 @@ export class IntencionController {
     }
   }
 
-  public readonly update = async (req: Request, res: Response): Promise<Response> => {
-    const [error, updateDto] = UpdateIntencionDto.update({ ...req.body, id: req.params.id })
+  public readonly update = async (
+    req: Request,
+    res: Response
+  ): Promise<Response> => {
+    const [error, updateDto] = UpdateIntencionDto.update({
+      ...req.body,
+      id: req.params.id,
+    })
     if (error) {
       return handleError(CustomError.badRequest(error), res)
     }
@@ -65,10 +104,16 @@ export class IntencionController {
     }
   }
 
-  public readonly delete = async (req: Request, res: Response): Promise<Response> => {
+  public readonly delete = async (
+    req: Request,
+    res: Response
+  ): Promise<Response> => {
     const id = +req.params.id!
     if (isNaN(id)) {
-      return handleError(CustomError.badRequest('The id contains invalid characters'), res)
+      return handleError(
+        CustomError.badRequest('The id contains invalid characters'),
+        res
+      )
     }
     try {
       const message = await this.service.deleteIntencion(id)

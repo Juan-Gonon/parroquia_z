@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable @typescript-eslint/space-before-function-paren */
 /* eslint-disable @typescript-eslint/comma-dangle */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
@@ -242,6 +243,57 @@ export class IntencionService {
     } catch (error) {
       if (error instanceof CustomError) throw error
       throw CustomError.internalServer('Internal server error')
+    }
+  }
+
+  public async getIntencionesByMonth(
+    year: number,
+    month: number
+  ): Promise<any> {
+    try {
+      // Rango de fechas
+      const startDate = new Date(Date.UTC(year, month - 1, 1))
+      const endDate = new Date(Date.UTC(year, month, 1))
+
+      const intenciones = await prisma.intencion.findMany({
+        where: {
+          fechapago: {
+            gte: startDate,
+            lt: endDate,
+          },
+          pagada: true,
+        },
+        select: {
+          montopagado: true,
+          fechapago: true,
+          tipointencion: {
+            select: { nombre: true },
+          },
+        },
+      })
+
+      // Total del mes
+      const totalRecaudado = intenciones.reduce(
+        (sum, i) => sum + (i.montopagado?.toNumber() ?? 0),
+        0
+      )
+
+      // Agrupar por tipo de intención (para gráfico 2)
+      const agrupadoPorTipo: Record<string, number> = {}
+      intenciones.forEach((i) => {
+        const tipo = i.tipointencion?.nombre || 'Desconocido'
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+        agrupadoPorTipo[tipo] = (agrupadoPorTipo[tipo] || 0) + 1
+      })
+
+      return {
+        totalRecaudado,
+        agrupadoPorTipo,
+        intenciones,
+      }
+    } catch (error) {
+      if (error instanceof CustomError) throw error
+      throw CustomError.internalServer('Error al obtener intenciones del mes')
     }
   }
 }
