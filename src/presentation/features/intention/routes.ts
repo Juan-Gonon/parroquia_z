@@ -22,6 +22,8 @@ export class IntencionRoutes {
 
     router.get('/by-month/:year/:month', controller.getByMonth)
 
+    router.get('/by-last-months/:count', controller.getByLastMonths)
+
     router.get(
       '/:id',
       [

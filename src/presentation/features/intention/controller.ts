@@ -50,6 +50,24 @@ export class IntencionController {
     }
   }
 
+  public getByLastMonths = async (
+    req: Request,
+    res: Response
+  ): Promise<Response> => {
+    const count = parseInt(req.params.count!)
+
+    if (isNaN(count) || count <= 0) {
+      return res.status(400).json({ message: 'Invalid count parameter' })
+    }
+
+    try {
+      const result = await this.service.getByLastMonths(count)
+      return res.json(result)
+    } catch (error) {
+      return handleError(error, res)
+    }
+  }
+
   public readonly getById = async (
     req: Request,
     res: Response

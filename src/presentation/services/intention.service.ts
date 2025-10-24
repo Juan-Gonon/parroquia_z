@@ -296,4 +296,59 @@ export class IntencionService {
       throw CustomError.internalServer('Error al obtener intenciones del mes')
     }
   }
+
+  public async getByLastMonths(count: number): Promise<any> {
+    try {
+      const now = new Date()
+      const currentYear = now.getFullYear()
+      const currentMonth = now.getMonth() + 1 // Enero = 1
+
+      const results: object[] = []
+
+      for (let i = count - 1; i >= 0; i--) {
+        const date = new Date(currentYear, currentMonth - 1 - i, 1)
+        const year = date.getFullYear()
+        const month = date.getMonth() + 1
+
+        const startDate = new Date(Date.UTC(year, month - 1, 1))
+        const endDate = new Date(Date.UTC(year, month, 1))
+
+        const total = await prisma.intencion.aggregate({
+          _sum: { montopagado: true },
+          where: {
+            fechapago: {
+              gte: startDate,
+              lt: endDate,
+            },
+            pagada: true,
+          },
+        })
+
+        const meses = [
+          'Ene',
+          'Feb',
+          'Mar',
+          'Abr',
+          'May',
+          'Jun',
+          'Jul',
+          'Ago',
+          'Sep',
+          'Oct',
+          'Nov',
+          'Dic',
+        ]
+
+        results.push({
+          mes: `${meses[month - 1]!} ${year}`,
+          totalRecaudado: total._sum.montopagado ?? 0,
+        })
+      }
+
+      return results
+    } catch (error) {
+      if (error instanceof CustomError) throw error
+      throw CustomError.internalServer('Error al obtener últimos meses')
+    }
+  }
 }
