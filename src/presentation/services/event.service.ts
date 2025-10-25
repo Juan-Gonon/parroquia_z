@@ -51,6 +51,29 @@ export class EventoService {
     }
   }
 
+  public async getUpcomingEvents(): Promise<any[]> {
+    const now = new Date()
+
+    try {
+      const upcomingEvents = await prisma.evento.findMany({
+        where: {
+          fecha_ini: {
+            gt: now, // Solo los eventos con fecha mayor a la actual
+          },
+        },
+        orderBy: {
+          fecha_ini: 'asc', // Ordenar del más próximo al más lejano
+        },
+      })
+
+      return upcomingEvents
+    } catch (error) {
+      throw CustomError.internalServer(
+        'An error occurred while retrieving upcoming events.'
+      )
+    }
+  }
+
   // Crear un nuevo evento
   public async createEvent(createEventoDto: CreateEventoDto): Promise<any> {
     // Verificar si las relaciones (Comunidad, TipoEvento) existen

@@ -21,6 +21,9 @@ export class EventoRoutes {
     // Ruta para obtener todos los eventos
     router.get('/', controller.getAllEvents)
 
+    // proximos eventos
+    router.get('/upcoming', controller.getUpcomingEvents)
+
     // Ruta para obtener un evento por su ID
     router.get(
       '/:id',
