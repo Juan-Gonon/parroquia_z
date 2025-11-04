@@ -1,0 +1,7 @@
+export * from './auth'
+export * from './comunitities/CreateCommunityDto'
+export * from './comunitities/UpdateCommunity.dto'
+export * from './tipoturnos/CreateTipoTurnoDto'
+export * from './tipoturnos/UpdateTipoTurnoDto'
+export * from './eventType/CreateEventType.dto'
+export * from './eventType/UpdateEventType.dto'
